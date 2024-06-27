@@ -1,0 +1,13 @@
+<mat-button-toggle-group [formControl]="control">
+  @for (item of options; track $index) {
+  <mat-button-toggle
+    [value]="item.value"
+    [style]="{
+      backgroundColor: control.value === item.value ? item.color : ''
+    }"
+    (click)="item.clickAction ? item.clickAction(item) : null"
+  >
+    {{ item.label }}
+  </mat-button-toggle>
+  }
+</mat-button-toggle-group>

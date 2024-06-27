@@ -1,0 +1,28 @@
+<div class="content-box p-4 bg-white shadow-md rounded-lg m-4">
+  <div
+    mat-tab-nav-bar
+    class="custom-tab flex justify-between items-center border-b border-gray-300"
+  >
+    <a
+      mat-tab-link
+      class="nav-link inline-flex items-center p-2 text-gray-700 hover:text-blue-500"
+      routerLink="/dashboard/employees/details"
+      routerLinkActive="active text-indigo-600"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon class="mr-1">assignment_ind</mat-icon>All Employees
+    </a>
+    @if(authService.isAdmin()){
+    <a
+      mat-tab-link
+      class="nav-link inline-flex items-center p-2 text-gray-700 hover:text-blue-500"
+      routerLink="/dashboard/employees/new"
+      routerLinkActive="active text-indigo-600"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon class="mr-1">person_add</mat-icon>New Employee
+    </a>
+    }
+  </div>
+  <router-outlet></router-outlet>
+</div>

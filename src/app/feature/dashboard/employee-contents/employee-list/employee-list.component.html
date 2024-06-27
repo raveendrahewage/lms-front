@@ -1,0 +1,159 @@
+<div class="content-box p-4 bg-white rounded-lg">
+  @if(loading){
+  <div class="mb-4">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  }
+  <form [formGroup]="searchForm" (ngSubmit)="getAllEmployeesSsr()">
+    <div class="form-group flex flex-wrap">
+      <div class="w-full md:w-1/2 pr-2">
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            matInput
+            name="searchTerm"
+            placeholder="Search.."
+            formControlName="searchTerm"
+            type="text"
+            class="text-black"
+            (input)="onSearchTermChange()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="w-full md:w-1/2">
+        <button
+          mat-raised-button
+          type="submit"
+          class="bg-blue-500 text-white rounded p-3"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <table
+    mat-table
+    class="w-full"
+    [dataSource]="employees"
+    matSort
+    (matSortChange)="onSortChange($event)"
+  >
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef class="px-4 py-2">No.</th>
+      <td mat-cell *matCellDef="let employee; let i = index" class="px-4 py-2">
+        {{ getRecordIndex(i) }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="firstName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        {{ employee.fullName }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="phoneNumber">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Phone Number
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        {{ employee.phoneNumber }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Email
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        {{ employee.email }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="supervisor">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Supervisor
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        <a [routerLink]="'/home/employees/details/' + employee.supervisor?.id">
+          {{ employee.supervisorName }}
+        </a>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Role
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        <app-system-user-role-chip
+          [role]="employee.roleId"
+        ></app-system-user-role-chip>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        @switch (employee.status) { @case (dataRecordStatus.ACTIVE) {
+        <div class="bg-[#0cbe8c] p-2 rounded-full w-[75px] text-center">
+          {{ "Active" }}
+        </div>
+        } @case (dataRecordStatus.INACTIVE) {
+        <div class="bg-gray-400 p-2 rounded-full w-[75px] text-center">
+          {{ "Inactive" }}
+        </div>
+        } }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Options</th>
+      <td mat-cell *matCellDef="let employee" class="px-4 py-2">
+        <a
+          [routerLink]="'/dashboard/employees/details/' + employee.id"
+          class="text-blue-500 hover:underline"
+        >
+          View
+        </a>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <div class="flex justify-end items-center mt-4">
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      [length]="totalRecords"
+      [pageSize]="pageSize"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+</div>

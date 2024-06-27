@@ -1,0 +1,431 @@
+<mat-tab-group [dynamicHeight]="true">
+  @if(authService.isAdmin()){
+  <mat-tab label="Al Employee Leaves">
+    <div class="content-box p-4 bg-white rounded-lg">
+      @if(loading){
+      <div class="mb-4">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      }
+      <form [formGroup]="searchForm" (ngSubmit)="getAllLeaves()">
+        <div class="form-group flex flex-wrap">
+          <div class="w-full md:w-1/2 pr-2">
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                name="searchTerm"
+                placeholder="Search.."
+                formControlName="searchTerm"
+                type="text"
+                class="text-black"
+                (input)="onSearchTermChange()"
+              />
+            </mat-form-field>
+          </div>
+          <div class="w-full md:w-1/2">
+            <button
+              mat-raised-button
+              type="submit"
+              class="bg-blue-500 text-white rounded p-3"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <table
+        mat-table
+        class="w-full"
+        [dataSource]="allEmployeeLeaves"
+        matSort
+        (matSortChange)="onSortChange($event)"
+      >
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">No.</th>
+          <td mat-cell *matCellDef="let leave; let i = index" class="px-4 py-2">
+            {{ getRecordIndex(i) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="employee">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Employee
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.employeeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="leaveType">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Leave Type
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.leaveTypeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="fromDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            From Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.fromDate | date : "EEE dd-MMM-yyyy" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="toDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            To Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a [routerLink]="'/home/employees/details/' + leave.supervisor?.id">
+              {{ leave.toDate | date : "EEE dd-MMM-yyyy" }}
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <app-leave-status-chip
+              [status]="leave.status"
+            ></app-leave-status-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Options</th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a
+              [routerLink]="'/dashboard/leaves/details/' + leave.id"
+              class="text-blue-500 hover:underline"
+            >
+              View
+            </a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <div class="flex justify-end items-center mt-4">
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          [length]="totalAllEmployeeLeaves"
+          [pageSize]="pageSize"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-tab>
+  }@else {
+  <mat-tab label="My Leaves">
+    <div class="content-box p-4 bg-white rounded-lg">
+      @if(loading){
+      <div class="mb-4">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      }
+      <form
+        [formGroup]="searchForm"
+        (ngSubmit)="getEmployeeLeaveByIdSsr(leaveFetchingMode.ONLY_MINE)"
+      >
+        <div class="form-group flex flex-wrap">
+          <div class="w-full md:w-1/2 pr-2">
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                name="searchTerm"
+                placeholder="Search.."
+                formControlName="searchTerm"
+                type="text"
+                class="text-black"
+                (input)="onSearchTermChange(leaveFetchingMode.ONLY_MINE)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="w-full md:w-1/2">
+            <button
+              mat-raised-button
+              type="submit"
+              class="bg-blue-500 text-white rounded p-3"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <table
+        mat-table
+        class="w-full"
+        [dataSource]="myLeaves"
+        matSort
+        (matSortChange)="onSortChange($event, leaveFetchingMode.ONLY_MINE)"
+      >
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">No.</th>
+          <td mat-cell *matCellDef="let leave; let i = index" class="px-4 py-2">
+            {{ getRecordIndex(i) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="employee">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Employee
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.employeeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="leaveType">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Leave Type
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.leaveTypeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="fromDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            From Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.fromDate | date : "EEE dd-MMM-yyyy" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="toDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            To Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a [routerLink]="'/home/employees/details/' + leave.supervisor?.id">
+              {{ leave.toDate | date : "EEE dd-MMM-yyyy" }}
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <app-leave-status-chip
+              [status]="leave.status"
+            ></app-leave-status-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Options</th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a
+              [routerLink]="'/dashboard/leaves/details/' + leave.id"
+              class="text-blue-500 hover:underline"
+            >
+              View
+            </a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <div class="flex justify-end items-center mt-4">
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          [length]="totalMyLeaves"
+          [pageSize]="pageSize"
+          (page)="onPageChange($event, leaveFetchingMode.ONLY_MINE)"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Leave Approvals">
+    <div class="content-box p-4 bg-white rounded-lg">
+      @if(loading){
+      <div class="mb-4">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      }
+      <form
+        [formGroup]="searchForm"
+        (ngSubmit)="getEmployeeLeaveByIdSsr(leaveFetchingMode.ONLY_APPROVALS)"
+      >
+        <div class="form-group flex flex-wrap">
+          <div class="w-full md:w-1/2 pr-2">
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                name="searchTerm"
+                placeholder="Search.."
+                formControlName="searchTerm"
+                type="text"
+                class="text-black"
+                (input)="onSearchTermChange(leaveFetchingMode.ONLY_APPROVALS)"
+              />
+            </mat-form-field>
+          </div>
+          <div class="w-full md:w-1/2">
+            <button
+              mat-raised-button
+              type="submit"
+              class="bg-blue-500 text-white rounded p-3"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <table
+        mat-table
+        class="w-full"
+        [dataSource]="leavesForApproval"
+        matSort
+        (matSortChange)="onSortChange($event, leaveFetchingMode.ONLY_APPROVALS)"
+      >
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">No.</th>
+          <td mat-cell *matCellDef="let leave; let i = index" class="px-4 py-2">
+            {{ getRecordIndex(i) }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="employee">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Employee
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.employeeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="leaveType">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Leave Type
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.leaveTypeName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="fromDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            From Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            {{ leave.fromDate | date : "EEE dd-MMM-yyyy" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="toDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            To Date
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a [routerLink]="'/home/employees/details/' + leave.supervisor?.id">
+              {{ leave.toDate | date : "EEE dd-MMM-yyyy" }}
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="cursor-pointer px-4 py-2"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <app-leave-status-chip
+              [status]="leave.status"
+            ></app-leave-status-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-2">Options</th>
+          <td mat-cell *matCellDef="let leave" class="px-4 py-2">
+            <a
+              [routerLink]="'/dashboard/leaves/details/' + leave.id"
+              class="text-blue-500 hover:underline"
+            >
+              View
+            </a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <div class="flex justify-end items-center mt-4">
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          [length]="totalLeavesForApproval"
+          [pageSize]="pageSize"
+          (page)="onPageChange($event, leaveFetchingMode.ONLY_APPROVALS)"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-tab>
+  }
+</mat-tab-group>

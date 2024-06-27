@@ -1,0 +1,12 @@
+@switch (role) { @case (systemRoleId.ADMIN) {
+<div class="bg-[darkgoldenrod] p-2 rounded-full w-[90px] text-center">
+  <mat-icon class="admin-icon text-black align-middle"
+    >admin_panel_settings</mat-icon
+  >{{ "Admin" }}
+</div>
+} @case (systemRoleId.USER) {
+<div class="bg-[darkseagreen] p-2 rounded-full w-[95px] text-center">
+  <mat-icon class="admin-icon text-black align-middle">person</mat-icon
+  >{{ "User" }}
+</div>
+} }

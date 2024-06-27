@@ -1,0 +1,17 @@
+@switch (status) { @case (leaveSatus.PENDING) {
+<div class="bg-[#2fa1ff] p-2 rounded-full w-[75px] text-center">
+  {{ "Pending" }}
+</div>
+} @case (leaveSatus.CANCELED) {
+<div class="bg-gray-400 p-2 rounded-full w-[75px] text-center">
+  {{ "Canceled" }}
+</div>
+}@case (leaveSatus.DENIED) {
+<div class="bg-red-400 p-2 rounded-full w-[75px] text-center">
+  {{ "Denied" }}
+</div>
+}@case (leaveSatus.APPROVED) {
+<div class="bg-green-400 p-2 rounded-full w-[75px] text-center">
+  {{ "Approved" }}
+</div>
+} }

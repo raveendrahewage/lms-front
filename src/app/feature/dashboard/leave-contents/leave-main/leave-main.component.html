@@ -1,0 +1,28 @@
+<div class="content-box p-4 bg-white shadow-md rounded-lg m-4">
+  <div
+    mat-tab-nav-bar
+    class="custom-tab flex justify-between items-center border-b border-gray-300"
+  >
+    <a
+      mat-tab-link
+      class="nav-link inline-flex items-center p-2 text-gray-700 hover:text-blue-500"
+      routerLink="/dashboard/leaves/details"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>event_note</mat-icon>&nbsp;All Requests</a
+    >
+    @if(!authService.isAdmin()){
+    <a
+      mat-tab-link
+      class="nav-link inline-flex items-center p-2 text-gray-700 hover:text-blue-500"
+      routerLink="/dashboard/leaves/new"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>add_circle</mat-icon>&nbsp;Request For Leave</a
+    >
+    }
+  </div>
+  <router-outlet></router-outlet>
+</div>
