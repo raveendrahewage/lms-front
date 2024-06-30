@@ -4,7 +4,6 @@
   (ngSubmit)="onSubmit(formDirective)"
   class="w-1/2 mx-auto p-6 bg-white rounded-lg"
 >
-  <h4 class="mb-4 text-xl font-bold text-center">Request For Leave</h4>
   <div class="mb-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label class="text-black">Employee</mat-label>
@@ -37,7 +36,7 @@
         type="text"
         id="reason"
         formControlName="reason"
-        placeholder="Leave Reason"
+        placeholder="Enter leave Reason"
         class="text-black"
       ></textarea>
     </mat-form-field>
@@ -67,6 +66,7 @@
         <mat-label class="text-black">Date To</mat-label>
         <input
           matInput
+          [min]="this.leaveForm.controls.fromDate.value"
           [matDatepicker]="pickerTo"
           id="toDate"
           formControlName="toDate"

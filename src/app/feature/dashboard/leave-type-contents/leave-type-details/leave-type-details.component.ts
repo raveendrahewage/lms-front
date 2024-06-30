@@ -50,13 +50,7 @@ export class LeaveTypeDetailsComponent implements OnInit {
   leaveTypeUpdateForm: FormGroup<LeaveTypeForm> = this.fb.group({
     id: [0, [Validators.required]],
     name: ['', [Validators.required]],
-    status: [
-      {
-        value: DataRecordStatus.ACTIVE,
-        disabled: !this.authService.isAdmin(),
-      },
-      [Validators.required],
-    ],
+    status: [DataRecordStatus.ACTIVE, [Validators.required]],
   });
   statuses: StatusValue[] = [
     {
@@ -72,7 +66,7 @@ export class LeaveTypeDetailsComponent implements OnInit {
       clickAction: () => this.updateStatus(DataRecordStatus.INACTIVE),
     },
   ];
-  isEdit: boolean = false;
+  isEditable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -85,12 +79,12 @@ export class LeaveTypeDetailsComponent implements OnInit {
   ngOnInit() {
     this.leaveTypeUpdateForm.disable();
     this.sub = this.route.params.subscribe((params) => {
-      this.getEmployeeById(+params['id']);
+      this.getLeaveTypeById(+params['id']);
     });
   }
 
   toggleMode(isEdit: boolean) {
-    this.isEdit = isEdit;
+    this.isEditable = isEdit;
     if (isEdit) this.leaveTypeUpdateForm.enable();
     else {
       this.patchLeaveTypeUpdateForm(this.leaveType);
@@ -103,14 +97,10 @@ export class LeaveTypeDetailsComponent implements OnInit {
   }
 
   patchLeaveTypeUpdateForm(leaveType: LeaveType) {
-    this.leaveTypeUpdateForm.patchValue({
-      id: leaveType.id,
-      name: leaveType.name,
-      status: leaveType.status,
-    });
+    this.leaveTypeUpdateForm.patchValue(leaveType);
   }
 
-  getEmployeeById(id: number) {
+  getLeaveTypeById(id: number) {
     this.leaveTypeService.getLeaveTypeById(id).subscribe({
       next: (res) => {
         this.leaveType = res.data;

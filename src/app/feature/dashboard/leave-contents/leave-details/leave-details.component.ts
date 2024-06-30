@@ -41,6 +41,7 @@ import { StatusValue } from '../../models/status-toggle';
 import { ConfimationModalComponent } from '../../shared/confimation-modal/confimation-modal.component';
 import { ConfirmationDialogData } from '../../models/confimation-modal-data';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-leaverequest-manage',
@@ -48,6 +49,7 @@ import { MatDialog } from '@angular/material/dialog';
   providers: [provideNativeDateAdapter(), DatePipe],
   imports: [
     CommonModule,
+    MatIcon,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -120,7 +122,9 @@ export class LeaveDetailsComponent implements OnInit {
       clickAction: () => this.updateStatus(LeaveStatus.CANCELED),
     },
   ];
-  isEditable: boolean = true;
+  isEditable: boolean =
+    this.authService.getCurrentSystemUserId() ===
+    this.leave.employee?.supervisorId;
 
   constructor(
     private fb: FormBuilder,
@@ -139,13 +143,24 @@ export class LeaveDetailsComponent implements OnInit {
     });
     this.getAllEmployees();
     this.getLeaveTypes();
+    this.setFormMode();
+  }
+
+  toggleMode(isEditable: boolean) {
+    this.isEditable = isEditable;
+    if (isEditable) {
+      this.setFormMode();
+    } else {
+      this.patchLeaveFrom(this.leave);
+      this.leaveForm.disable();
+    }
   }
 
   setFormMode() {
     if (
       this.authService.getCurrentSystemUserId() === this.leave.employeeId ||
       this.authService.getCurrentSystemUserId() ===
-        this.leave.employee.supervisorId
+        this.leave.employee?.supervisorId
     ) {
       if (
         this.leave.leaveStatus === LeaveStatus.APPROVED ||
@@ -218,13 +233,13 @@ export class LeaveDetailsComponent implements OnInit {
   }
   patchLeaveFrom(leave: Leave) {
     this.leaveForm.patchValue(leave);
+    this.leaveForm.controls.dateWiseLeaves.clear();
     for (let i = 0; i < leave.dateWiseLeaves.length; i++) {
       this.leaveForm.controls.dateWiseLeaves.push(
         this.createDateWiseLeave(leave.dateWiseLeaves[i])
       );
     }
     this.setDataSource();
-    this.setFormMode();
   }
 
   openConfirmationDialog(status: string): void {
@@ -238,14 +253,6 @@ export class LeaveDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfimationModalComponent, {
       data: dialogData,
     });
-
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     console.log('User confirmed the action.');
-    //   } else {
-    //     console.log('User cancelled the action.');
-    //   }
-    // });
   }
 
   getLeaveById(id: number) {
@@ -308,9 +315,9 @@ export class LeaveDetailsComponent implements OnInit {
       .updateLeave(this.leaveForm.getRawValue() as Leave)
       .subscribe({
         next: (res) => {
+          this.toastr.success(res.message);
           this.leaveForm.controls.dateWiseLeaves.clear();
           this.setDataSource();
-          this.toastr.success('Leave updated successfully');
         },
         error: (error) => {
           this.toastr.error(error.error.message);

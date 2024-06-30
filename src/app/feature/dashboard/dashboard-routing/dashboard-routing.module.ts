@@ -14,12 +14,18 @@ import { LeaveTypeMainComponent } from '../leave-type-contents/leave-type-main/l
 import { LeaveTypeListComponent } from '../leave-type-contents/leave-type-list/leave-type-list.component';
 import { LeaveTypeDetailsComponent } from '../leave-type-contents/leave-type-details/leave-type-details.component';
 import { LeaveTypeManageComponent } from '../leave-type-contents/leave-type-manage/leave-type-manage.component';
+import { EventMainComponent } from '../event-contents/event-main/event-main.component';
+import { EventListComponent } from '../event-contents/event-list/event-list.component';
+import { EventManageComponent } from '../event-contents/event-manage/event-manage.component';
+import { EventDetailsComponent } from '../event-contents/event-details/event-details.component';
+import { DashboardMainComponent } from '../dashboard-main/dashboard-main.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
     children: [
+      { path: '', component: DashboardMainComponent },
       {
         path: 'employees',
         component: EmployeeMainComponent,
@@ -55,7 +61,20 @@ export const DASHBOARD_ROUTES: Routes = [
           {
             path: 'new',
             component: LeaveTypeManageComponent,
-            canActivate: [adminAuthGuard],
+          },
+        ],
+      },
+      {
+        path: 'events',
+        component: EventMainComponent,
+        canActivateChild: [adminAuthGuard],
+        children: [
+          { path: '', redirectTo: 'details', pathMatch: 'full' },
+          { path: 'details', component: EventListComponent },
+          { path: 'details/:id', component: EventDetailsComponent },
+          {
+            path: 'new',
+            component: EventManageComponent,
           },
         ],
       },

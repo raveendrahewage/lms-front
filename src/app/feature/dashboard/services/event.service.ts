@@ -7,58 +7,78 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Constant } from '../constant/constant';
-import { Event } from './../models/event';
+import { LeaveType } from '../models/leave-type';
+import { ApiResponse } from '../models/api-response';
+import { DataTableConfiguration } from '../models/data-table-configuration';
+import { DataTableResult } from '../models/data-table-result';
+import { Event } from '../models/event';
+import { CalendarEvent } from '../models/calendar-event';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EventService {
   constructor(private http: HttpClient) {}
 
   errorHandler(error: HttpErrorResponse) {
-    console.log('Event api error ', error);
+    console.log('LeaveType api error ', error);
     return throwError(error);
   }
 
-  getAllEvents(page: number, size: number, sort: string): Observable<any> {
+  getAllEvents(): Observable<ApiResponse<Event[]>> {
     return this.http
-      .get<Event[]>(Constant.API_ENDPOINT + '/rest/events', {
-        params: {
-          page: page,
-          size: size,
-          sort: sort,
-        },
-      })
+      .get<ApiResponse<Event[]>>(`${Constant.API_ENDPOINT}/event/get-events`)
       .pipe(catchError(this.errorHandler));
   }
 
-  getEventById(id: number): Observable<Event[]> {
+  getAllEventsSsr(
+    dataTableConfiguration: DataTableConfiguration
+  ): Observable<ApiResponse<DataTableResult<Event>>> {
     return this.http
-      .get<Event[]>(`${Constant.API_ENDPOINT}/event/${id}`)
+      .post<ApiResponse<DataTableResult<Event>>>(
+        `${Constant.API_ENDPOINT}/event/get-events/ssr`,
+        dataTableConfiguration
+      )
       .pipe(catchError(this.errorHandler));
   }
 
-  createEvent(event: Event): Observable<Event[]> {
+  getEventById(id: number): Observable<ApiResponse<Event>> {
     return this.http
-      .post<any>(`${Constant.API_ENDPOINT}/event`, event)
+      .get<ApiResponse<Event>>(`${Constant.API_ENDPOINT}/event/${id}`)
+      .pipe(catchError(this.errorHandler));
+  }
+  getEventsBetweenDate(
+    startDate: string,
+    endDate: string
+  ): Observable<ApiResponse<CalendarEvent[]>> {
+    return this.http
+      .get<ApiResponse<CalendarEvent[]>>(
+        `${Constant.API_ENDPOINT + '/event/get-events-between'}`,
+        {
+          params: {
+            startDate,
+            endDate,
+          },
+        }
+      )
       .pipe(catchError(this.errorHandler));
   }
 
-  updateEvent(event: Event): Observable<Event[]> {
+  createEvent(event: Event): Observable<ApiResponse<Event>> {
     return this.http
-      .put<any>(Constant.API_ENDPOINT + '/rest/events', event)
+      .post<ApiResponse<Event>>(`${Constant.API_ENDPOINT}/event`, event)
       .pipe(catchError(this.errorHandler));
   }
 
-  getLeaveAndEventsBetweenDate(
-    startDate: Date,
-    endDate: Date
-  ): Observable<any> {
+  updateEvent(event: Event): Observable<ApiResponse<Event>> {
     return this.http
-      .get<Event[]>(Constant.API_ENDPOINT + '/rest/events/byDate', {
-        params: {
-          date1: startDate.toDateString(),
-          date2: endDate.toDateString(),
-        },
-      })
+      .patch<ApiResponse<Event>>(`${Constant.API_ENDPOINT}/event`, event)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  deleteEvent(id: number): Observable<ApiResponse<Event>> {
+    return this.http
+      .delete<ApiResponse<Event>>(`${Constant.API_ENDPOINT}/event/${id}`)
       .pipe(catchError(this.errorHandler));
   }
 }

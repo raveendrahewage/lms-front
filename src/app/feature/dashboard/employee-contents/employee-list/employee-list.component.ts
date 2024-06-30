@@ -24,6 +24,7 @@ import { getEnumValueByName } from '../../helper/enum-helper';
 import { DataRecordStatus } from '../../constant/data-record-status';
 import { SystemRoleId } from '../../constant/system-user-roles';
 import { SystemUserRoleChipComponent } from '../../shared/system-user-role-chip/system-user-role-chip.component';
+import { DataRecordStatusChipComponent } from '../../shared/data-record-status-chip/data-record-status-chip.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -39,6 +40,7 @@ import { SystemUserRoleChipComponent } from '../../shared/system-user-role-chip/
     MatPaginatorModule,
     RouterModule,
     SystemUserRoleChipComponent,
+    DataRecordStatusChipComponent,
   ],
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.css'],

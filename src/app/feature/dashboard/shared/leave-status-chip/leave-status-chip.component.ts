@@ -10,5 +10,34 @@ import { LeaveStatus } from '../../constant/leave-status';
 })
 export class LeaveStatusChipComponent {
   @Input() status!: LeaveStatus;
-  leaveSatus: typeof LeaveStatus = LeaveStatus;
+
+  getStatusClass(): string {
+    switch (this.status) {
+      case LeaveStatus.PENDING:
+        return 'bg-[#2fa1ff]';
+      case LeaveStatus.CANCELED:
+        return 'bg-gray-400';
+      case LeaveStatus.DENIED:
+        return 'bg-red-400';
+      case LeaveStatus.APPROVED:
+        return 'bg-green-400';
+      default:
+        return '';
+    }
+  }
+
+  getStatusText(): string {
+    switch (this.status) {
+      case LeaveStatus.PENDING:
+        return 'Pending';
+      case LeaveStatus.CANCELED:
+        return 'Canceled';
+      case LeaveStatus.DENIED:
+        return 'Denied';
+      case LeaveStatus.APPROVED:
+        return 'Approved';
+      default:
+        return '';
+    }
+  }
 }

@@ -1,1 +1,33 @@
-<p>leave-type-manage works!</p>
+<form
+  [formGroup]="newLeaveTypeForm"
+  (ngSubmit)="onSubmit()"
+  class="w-1/2 mx-auto mt-5"
+>
+  <div class="form-group flex flex-wrap mb-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label class="text-black">Name</mat-label>
+      <input
+        matInput
+        name="name"
+        placeholder="Enter name"
+        formControlName="name"
+        type="text"
+        class="text-black"
+      />
+    </mat-form-field>
+    <div class="w-full flex first-line: justify-end">
+      <app-option-toggle
+        [control]="newLeaveTypeForm.controls.status"
+        [options]="statuses"
+      ></app-option-toggle>
+    </div>
+  </div>
+  <button
+    mat-raised-button
+    color="primary"
+    class="mt-3 w-full bg-blue-500 text-white py-2 rounded"
+    type="submit"
+  >
+    Save
+  </button>
+</form>

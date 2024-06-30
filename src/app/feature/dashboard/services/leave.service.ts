@@ -52,9 +52,9 @@ export class LeaveService {
       .pipe(catchError(this.errorHandler));
   }
 
-  createEmployeeLeave(leave: Leave): Observable<Leave> {
+  createLeave(leave: Leave): Observable<ApiResponse<Leave>> {
     return this.http
-      .post<Leave>(`${Constant.API_ENDPOINT}/leave`, leave)
+      .post<ApiResponse<Leave>>(`${Constant.API_ENDPOINT}/leave`, leave)
       .pipe(catchError(this.errorHandler));
   }
 

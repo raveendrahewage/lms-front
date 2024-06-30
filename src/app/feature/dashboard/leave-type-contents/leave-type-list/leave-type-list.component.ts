@@ -1,4 +1,3 @@
-import { EmployeeService } from './../../services/employee.service';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
@@ -14,18 +13,15 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { SystemUserListItem } from '../../models/system-user';
 import { SearchForm } from '../../models/forms';
 import { DataTableConfiguration } from '../../models/data-table-configuration';
 import { SortMode } from '../../constant/sort-mode';
 import { ToastrService } from 'ngx-toastr';
 import { capitalizeFirstLetter } from '../../helper/string-formatter';
 import { getEnumValueByName } from '../../helper/enum-helper';
-import { DataRecordStatus } from '../../constant/data-record-status';
-import { SystemRoleId } from '../../constant/system-user-roles';
-import { SystemUserRoleChipComponent } from '../../shared/system-user-role-chip/system-user-role-chip.component';
 import { LeaveTypeService } from '../../services/leave-type.service';
 import { LeaveType } from '../../models/leave-type';
+import { DataRecordStatusChipComponent } from '../../shared/data-record-status-chip/data-record-status-chip.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -40,14 +36,13 @@ import { LeaveType } from '../../models/leave-type';
     ReactiveFormsModule,
     MatPaginatorModule,
     RouterModule,
-    SystemUserRoleChipComponent,
+    DataRecordStatusChipComponent,
   ],
   templateUrl: './leave-type-list.component.html',
   styleUrls: ['./leave-type-list.component.css'],
 })
 export class LeaveTypeListComponent implements OnInit {
   leaveTypes: LeaveType[] = [];
-  dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   loading: boolean = true;
   page: number = 0;
   pageSize: number = 10;
@@ -57,7 +52,7 @@ export class LeaveTypeListComponent implements OnInit {
   searchForm: FormGroup<SearchForm> = this.fb.nonNullable.group({
     searchTerm: ['', Validators.required],
   });
-  displayedColumns: string[] = ['index', 'name', 'options'];
+  displayedColumns: string[] = ['index', 'name', 'status', 'options'];
 
   constructor(
     private leaveTypeService: LeaveTypeService,

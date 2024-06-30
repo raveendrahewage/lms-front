@@ -4,11 +4,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { EnumSelectField } from '../../models/enum-select-field';
 import { StatusValue } from '../../models/status-toggle';
 
-export enum DataRecordStatus {
-  Active = 1,
-  Inactive = 2,
-}
-
 @Component({
   selector: 'app-option-toggle',
   standalone: true,

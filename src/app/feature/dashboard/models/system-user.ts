@@ -12,7 +12,7 @@ export interface SystemUser extends DataRecord {
   roleId: number;
   supervisorId?: number | null;
   supervisor?: SystemUser | null;
-  employeesUnderSupervision: SystemUser[];
+  employeesUnderSupervision?: SystemUser[] | null;
   role: SystemRole;
   leaves: Leave[];
   reviewedLeaves: Leave[];

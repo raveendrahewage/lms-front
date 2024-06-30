@@ -1,0 +1,34 @@
+<div>
+  <app-calendar-header
+    [(view)]="view"
+    [(viewDate)]="viewDate"
+    (viewDateChange)="fetchEvents()"
+    (viewChange)="fetchEvents()"
+  >
+  </app-calendar-header>
+  @switch (view) { @case (calendarView.Month){
+  <mwl-calendar-month-view
+    [viewDate]="viewDate"
+    [events]="calendarEvents"
+    [activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="eventClicked($event.event)"
+    [weekendDays]="[6]"
+  >
+  </mwl-calendar-month-view>
+  }@case (calendarView.Week){
+  <mwl-calendar-week-view
+    [viewDate]="viewDate"
+    [events]="calendarEvents"
+    (eventClicked)="eventClicked($event.event)"
+  >
+  </mwl-calendar-week-view>
+  }@case(calendarView.Day){
+  <mwl-calendar-day-view
+    [viewDate]="viewDate"
+    [events]="calendarEvents"
+    (eventClicked)="eventClicked($event.event)"
+  >
+  </mwl-calendar-day-view>
+  } }
+</div>

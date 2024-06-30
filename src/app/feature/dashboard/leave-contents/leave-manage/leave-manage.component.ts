@@ -185,13 +185,13 @@ export class LeaveManageComponent implements OnInit {
   onSubmit(formDirective: FormGroupDirective) {
     if (this.leaveForm.valid) {
       this.leaveService
-        .createEmployeeLeave(this.leaveForm.getRawValue() as Leave)
+        .createLeave(this.leaveForm.getRawValue() as Leave)
         .subscribe({
           next: (res) => {
+            this.toastr.success(res.message);
             this.leaveForm.controls.dateWiseLeaves.clear();
             formDirective.resetForm();
             this.setDataSource();
-            this.toastr.success('Leave created successfully');
           },
           error: (error) => {
             this.toastr.error(error.error.message);

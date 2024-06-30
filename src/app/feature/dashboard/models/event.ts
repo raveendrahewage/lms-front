@@ -1,3 +1,4 @@
+import { EventStatus } from '../constant/event-status';
 import { DataRecord } from './data-record';
 
 export interface Event extends DataRecord {
@@ -5,4 +6,5 @@ export interface Event extends DataRecord {
   description: string;
   startDate: Date;
   endDate: Date;
+  eventStatus: EventStatus;
 }

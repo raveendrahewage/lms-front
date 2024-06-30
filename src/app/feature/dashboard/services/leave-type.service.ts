@@ -25,7 +25,9 @@ export class LeaveTypeService {
 
   getAllLeaveTypes(): Observable<ApiResponse<LeaveType[]>> {
     return this.http
-      .get<ApiResponse<LeaveType[]>>(`${Constant.API_ENDPOINT}/leave-type`)
+      .get<ApiResponse<LeaveType[]>>(
+        `${Constant.API_ENDPOINT}/leave-type/get-leave-types`
+      )
       .pipe(catchError(this.errorHandler));
   }
 
@@ -34,7 +36,7 @@ export class LeaveTypeService {
   ): Observable<ApiResponse<DataTableResult<LeaveType>>> {
     return this.http
       .post<ApiResponse<DataTableResult<LeaveType>>>(
-        `${Constant.API_ENDPOINT}/get-leave-types/ssr`,
+        `${Constant.API_ENDPOINT}/leave-type/get-leave-types/ssr`,
         dataTableConfiguration
       )
       .pipe(catchError(this.errorHandler));
@@ -43,14 +45,6 @@ export class LeaveTypeService {
   getLeaveTypeById(id: number): Observable<ApiResponse<LeaveType>> {
     return this.http
       .get<ApiResponse<LeaveType>>(`${Constant.API_ENDPOINT}/leave-type/${id}`)
-      .pipe(catchError(this.errorHandler));
-  }
-
-  getLeaveTypeByUserId(id: number): Observable<ApiResponse<LeaveType[]>> {
-    return this.http
-      .get<ApiResponse<LeaveType[]>>(
-        `${Constant.API_ENDPOINT}/leave-type/user/${id}`
-      )
       .pipe(catchError(this.errorHandler));
   }
 
@@ -65,7 +59,7 @@ export class LeaveTypeService {
 
   updateLeaveType(leaveType: LeaveType): Observable<ApiResponse<LeaveType>> {
     return this.http
-      .put<ApiResponse<LeaveType>>(
+      .patch<ApiResponse<LeaveType>>(
         `${Constant.API_ENDPOINT}/leave-type`,
         leaveType
       )
@@ -76,14 +70,6 @@ export class LeaveTypeService {
     return this.http
       .delete<ApiResponse<LeaveType>>(
         `${Constant.API_ENDPOINT}/leave-type/${id}`
-      )
-      .pipe(catchError(this.errorHandler));
-  }
-
-  searchByLeaveType(typeName: string): Observable<ApiResponse<LeaveType[]>> {
-    return this.http
-      .get<ApiResponse<LeaveType[]>>(
-        `${Constant.API_ENDPOINT}/leave-type/get-leave-type-by-name/${typeName}`
       )
       .pipe(catchError(this.errorHandler));
   }

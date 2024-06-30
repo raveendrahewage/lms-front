@@ -7,6 +7,7 @@ import {
   LeaveQuarterDayType,
 } from '../constant/leave';
 import { LeaveStatus } from '../constant/leave-status';
+import { EventStatus } from '../constant/event-status';
 
 export interface SearchForm {
   searchTerm: FormControl<string>;
@@ -77,4 +78,13 @@ export interface LeaveTypeForm {
   id: FormControl<number | null>;
   name: FormControl<string | null>;
   status: FormControl<DataRecordStatus | null>;
+}
+
+export interface EventForm {
+  id: FormControl<number | null>;
+  title: FormControl<string | null>;
+  description: FormControl<string | null>;
+  startDate: FormControl<Date | null>;
+  endDate: FormControl<Date | null>;
+  eventStatus: FormControl<EventStatus | null>;
 }

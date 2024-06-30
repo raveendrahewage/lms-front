@@ -90,7 +90,7 @@ export class EmployeeDetailsComponent implements OnInit {
       clickAction: () => this.updateStatus(DataRecordStatus.INACTIVE),
     },
   ];
-  isEdit: boolean = false;
+  isEditable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -108,9 +108,9 @@ export class EmployeeDetailsComponent implements OnInit {
     this.getAllEmployees();
   }
 
-  toggleMode(isEdit: boolean) {
-    this.isEdit = isEdit;
-    if (isEdit) {
+  toggleMode(isEditable: boolean) {
+    this.isEditable = isEditable;
+    if (isEditable) {
       this.profileUpdateForm.enable();
       if (!this.authService.isAdmin()) {
         this.profileUpdateForm.controls.supervisorId.disable();
@@ -154,8 +154,8 @@ export class EmployeeDetailsComponent implements OnInit {
 
   getAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
-      next: (data) => {
-        this.allEmployees = data.data;
+      next: (res) => {
+        this.allEmployees = res.data;
       },
       error: (error) => {
         console.log(error.error.message);

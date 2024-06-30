@@ -1,4 +1,3 @@
-import { EmployeeService } from './../../services/employee.service';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
@@ -127,7 +126,6 @@ export class LeaveListComponent implements OnInit {
     };
     this.leaveService.getAllLeavesSsr(dataTableConfiguration).subscribe({
       next: (res) => {
-        console.log(res.data.data);
         this.allEmployeeLeaves = res.data.data;
         this.totalAllEmployeeLeaves = res.data.totalRecords;
         this.loading = false;

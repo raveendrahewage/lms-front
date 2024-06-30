@@ -1,4 +1,8 @@
 .leave-emp-profile-img {
-    width: 60%;
-    border-radius: 5%;
+  width: 60%;
+  border-radius: 5%;
+}
+
+.mdc-text-field {
+  border-color: #e5e7eb !important;
 }

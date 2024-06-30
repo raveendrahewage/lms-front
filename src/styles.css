@@ -45,7 +45,6 @@ body {
 }
 
 .form-box .form-group {
-  /* border-bottom: 1px solid #dee2e6; */
   padding: 0.5% 0%;
 }
 .form-box .form-title {
@@ -194,4 +193,12 @@ body {
   #content.active {
     width: calc(100% - 250px);
   }
+}
+
+.mdc-text-field--disabled {
+  border: 0.5px solid #e5e7eb !important;
+}
+
+.mdc-floating-label {
+  background-color: white;
 }
