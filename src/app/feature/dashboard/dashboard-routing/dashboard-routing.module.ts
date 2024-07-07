@@ -48,6 +48,7 @@ export const DASHBOARD_ROUTES: Routes = [
           { path: 'details', component: LeaveListComponent },
           { path: 'details/:id', component: LeaveDetailsComponent },
           { path: 'new', component: LeaveManageComponent },
+          { path: 'new/:date', component: LeaveManageComponent },
         ],
       },
       {
@@ -74,6 +75,10 @@ export const DASHBOARD_ROUTES: Routes = [
           { path: 'details/:id', component: EventDetailsComponent },
           {
             path: 'new',
+            component: EventManageComponent,
+          },
+          {
+            path: 'new/:date',
             component: EventManageComponent,
           },
         ],

@@ -1,10 +1,7 @@
 import { Router } from '@angular/router';
-import { Event } from './../../../models/event';
 import { EventService } from './../../../services/event.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {
-  isSameMonth,
-  isSameDay,
   startOfMonth,
   endOfMonth,
   startOfWeek,
@@ -12,29 +9,39 @@ import {
   startOfDay,
   endOfDay,
   format,
-  getDay,
 } from 'date-fns';
 import {
   CalendarEvent as CalEvent,
   CalendarModule,
   CalendarView,
 } from 'angular-calendar';
-import { Subject, Observable, of, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { CalendarHeaderComponent } from '../calendar-header/calendar-header.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CalendarEvent } from '../../../models/calendar-event';
 import { CalendarEventType } from '../../../constant/calendar-event-type';
 import { ToastrService } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
+import { CalendarEventTileComponent } from '../../../shared/calendar-event-tile/calendar-event-tile.component';
+import { CalendarDayCellComponent } from '../../../shared/calendar-day-cell/calendar-day-cell.component';
 
 @Component({
-  selector: 'app-dash-calendar',
+  selector: 'app-dashboard-calendar',
   standalone: true,
-  imports: [CalendarModule, CalendarHeaderComponent, MatProgressSpinnerModule],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    CommonModule,
+    CalendarModule,
+    CalendarHeaderComponent,
+    MatProgressSpinnerModule,
+    CalendarEventTileComponent,
+    CalendarDayCellComponent,
+  ],
   templateUrl: './dashboard-calendar.component.html',
   styleUrls: ['./dashboard-calendar.component.css'],
 })
 export class DashboardCalendarComponent implements OnInit {
+  calendarEventType: typeof CalendarEventType = CalendarEventType;
   calendarView: typeof CalendarView = CalendarView;
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
@@ -50,38 +57,28 @@ export class DashboardCalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchEvents();
-  }
-
-  dayClicked({ date, events }: { date: Date; events: CalEvent[] }): void {
-    if (isSameMonth(date, this.viewDate)) {
-      this.viewDate = date;
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-    }
+    this.getEvents();
   }
 
   eventClicked(currEvent: CalEvent): void {
-    console.log('Event clicked', currEvent.meta.event);
     const clickedEvent: CalendarEvent = currEvent.meta.event;
-    if (clickedEvent.calendarEventType === CalendarEventType.LEAVE) {
-      this.router.navigate([
-        '/dashboard/leaves/details/' + clickedEvent.calendarEventId,
-      ]);
-    } else {
-      this.router.navigate([
-        '/dashboard/events/details/' + clickedEvent.calendarEventId,
-      ]);
+    switch (clickedEvent.calendarEventType) {
+      case CalendarEventType.LEAVE:
+        this.router.navigate([
+          '/dashboard/leaves/details/' + clickedEvent.calendarEventId,
+        ]);
+        break;
+      case CalendarEventType.EVENT:
+        this.router.navigate([
+          '/dashboard/events/details/' + clickedEvent.calendarEventId,
+        ]);
+        break;
+      default:
+        break;
     }
   }
 
-  fetchEvents(): void {
+  getEvents(): void {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -102,8 +99,16 @@ export class DashboardCalendarComponent implements OnInit {
             allDay: true,
             color:
               event.calendarEventType === CalendarEventType.LEAVE
-                ? { primary: '#2f79ef', secondary: '' }
-                : { primary: '#e21841', secondary: '' },
+                ? {
+                    primary: '#179376',
+                    secondary: '#179376',
+                    secondaryText: 'white',
+                  }
+                : {
+                    primary: '#e2af18',
+                    secondary: '#e2af18',
+                    secondaryText: 'white',
+                  },
             meta: {
               event,
             },
@@ -111,8 +116,8 @@ export class DashboardCalendarComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }

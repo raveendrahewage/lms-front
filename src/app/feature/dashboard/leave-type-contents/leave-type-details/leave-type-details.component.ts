@@ -107,8 +107,8 @@ export class LeaveTypeDetailsComponent implements OnInit {
         this.patchLeaveTypeUpdateForm(this.leaveType);
       },
       error: (error) => {
-        console.error(error.error.message);
-        this.toastr.error(error.error.message);
+        console.error(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -122,8 +122,8 @@ export class LeaveTypeDetailsComponent implements OnInit {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }

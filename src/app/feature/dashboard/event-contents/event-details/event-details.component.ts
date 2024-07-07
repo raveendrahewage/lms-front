@@ -112,7 +112,7 @@ export class EventDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error(error.error.message);
-        this.toastr.error(error.error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -125,10 +125,13 @@ export class EventDetailsComponent implements OnInit {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

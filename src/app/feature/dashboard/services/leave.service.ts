@@ -12,6 +12,7 @@ import { DataTableConfiguration } from '../models/data-table-configuration';
 import { LeaveFetchingMode } from '../constant/leave';
 import { DataTableResult } from '../models/data-table-result';
 import { ApiResponse } from '../models/api-response';
+import { LeaveReportItem } from '../models/leave-report-item';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class LeaveService {
   constructor(private http: HttpClient) {}
 
   errorHandler(error: HttpErrorResponse) {
-    console.log('EmployeeLeave api error ', error);
+    console.log('Leave api error ', error);
     return throwError(error);
   }
 
@@ -81,6 +82,13 @@ export class LeaveService {
           endDate,
         },
       })
+      .pipe(catchError(this.errorHandler));
+  }
+  getLeaveReport(): Observable<ApiResponse<LeaveReportItem[]>> {
+    return this.http
+      .get<ApiResponse<LeaveReportItem[]>>(
+        `${Constant.API_ENDPOINT + '/leave/generate-leave-report'}`
+      )
       .pipe(catchError(this.errorHandler));
   }
 }

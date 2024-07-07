@@ -132,7 +132,7 @@
                       Employees Under Supervision
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  @if(systemUser?.employeesUnderSupervision?.length?? 0 > 0){
+                  @if(systemUser.employeesUnderSupervision?.length?? 0 > 0){
                   @for (e of systemUser.employeesUnderSupervision; track e; let
                   i = $index) {
                   <div>

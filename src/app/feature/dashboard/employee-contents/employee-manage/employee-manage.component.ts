@@ -134,8 +134,8 @@ export class EmployeeManageComponent implements OnInit {
         this.allEmployees = data.data;
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -154,8 +154,8 @@ export class EmployeeManageComponent implements OnInit {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }

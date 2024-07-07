@@ -184,8 +184,8 @@ export class MyProfileComponent implements OnInit {
         this.patchProfileUpdateForm(this.systemUser);
       },
       error: (error) => {
-        console.error(error.error.message);
-        this.toastr.error(error.error.message);
+        console.error(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -196,8 +196,8 @@ export class MyProfileComponent implements OnInit {
         this.allEmployees = data.data;
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -215,7 +215,8 @@ export class MyProfileComponent implements OnInit {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }
@@ -230,8 +231,8 @@ export class MyProfileComponent implements OnInit {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }

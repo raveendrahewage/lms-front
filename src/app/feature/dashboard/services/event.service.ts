@@ -21,7 +21,7 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   errorHandler(error: HttpErrorResponse) {
-    console.log('LeaveType api error ', error);
+    console.log('Event api error ', error);
     return throwError(error);
   }
 

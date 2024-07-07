@@ -1,0 +1,7 @@
+<span
+  (click)="eventClicked(calendarEvent.meta.event)"
+  class="p-1 mb-1 mx-1 rounded-sm text-white block"
+  [style]="{ backgroundColor: calendarEvent.color?.primary }"
+>
+  <small>{{ calendarEvent.title }}</small>
+</span>

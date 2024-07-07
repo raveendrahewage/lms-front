@@ -1,11 +1,13 @@
 <nav class="navbar fixed-top custom-nav px-2">
   <div>
-    <button type="button" class="btn btn-info" (click)="toggleSidebar()">
+    <button
+      type="button"
+      class="text-white text-xl my-2 ml-2"
+      (click)="toggleSidebar()"
+    >
       <mat-icon>menu</mat-icon>
     </button>
-    <a class="navbar-brand text-white" routerLink="/dashboard"
-      >&nbsp; Dashboard</a
-    >
+    <a class="text-white text-xl" routerLink="/dashboard">&nbsp; Dashboard</a>
   </div>
   <div>
     <button mat-flat-button [matMenuTriggerFor]="menu">

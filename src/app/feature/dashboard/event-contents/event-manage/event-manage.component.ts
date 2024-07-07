@@ -6,7 +6,7 @@ import {
   FormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -45,7 +45,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   templateUrl: './event-manage.component.html',
   styleUrls: ['./event-manage.component.css'],
 })
-export class EventManageComponent {
+export class EventManageComponent implements OnInit {
+  sub: any;
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   eventForm: FormGroup<EventForm> = this.fb.group({
     id: [0, [Validators.required]],
@@ -72,11 +73,18 @@ export class EventManageComponent {
 
   constructor(
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     public authService: AuthService,
     private eventService: EventService,
     private toastr: ToastrService
   ) {}
 
+  ngOnInit(): void {
+    this.sub = this.route.params.subscribe((params) => {
+      this.eventForm.controls.startDate.setValue(params['date']);
+      this.eventForm.controls.endDate.setValue(params['date']);
+    });
+  }
   updateStatus(eventStatus: EventStatus) {
     this.eventForm.controls.eventStatus.patchValue(eventStatus);
   }
@@ -89,8 +97,8 @@ export class EventManageComponent {
           this.toastr.success(res.message);
         },
         error: (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
     }

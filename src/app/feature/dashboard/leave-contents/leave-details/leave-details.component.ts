@@ -262,8 +262,8 @@ export class LeaveDetailsComponent implements OnInit {
         this.patchLeaveFrom(this.leave);
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -273,8 +273,8 @@ export class LeaveDetailsComponent implements OnInit {
         this.leaveTypes = res.data;
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -285,8 +285,8 @@ export class LeaveDetailsComponent implements OnInit {
         this.allEmployees = res.data;
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -320,8 +320,12 @@ export class LeaveDetailsComponent implements OnInit {
           this.setDataSource();
         },
         error: (error) => {
-          this.toastr.error(error.error.message);
+          this.toastr.error(error.error.message ?? error.message);
         },
       });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

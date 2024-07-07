@@ -60,8 +60,8 @@ export class SignInComponent {
           this.router.navigate(['/dashboard']);
         },
         (error) => {
-          console.log(error.error.message);
-          this.toastr.error(error.error.message);
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
         }
       );
     }

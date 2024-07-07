@@ -1,0 +1,36 @@
+<div class="cal-cell-top mb-0">
+  @if(day.badgeTotal > 0){
+  <span class="cal-day-badge">{{ day.badgeTotal }}</span>
+  }
+  <span class="cal-day-number">{{
+    day.date | calendarDate : "monthViewDayNumber" : locale
+  }}</span>
+</div>
+<div class="flex flex-col w-full">
+  <div class="button-group relative mb-3">
+    <div class="flex justify-center">
+      <div class="flex space-x-2">
+        @if(!isWeekend() && !authService.isAdmin()){
+        <a
+          routerLink="leaves/new/{{ day.date | date : 'yyyy-MM-dd' }}"
+          class="flex items-center border-2 border-[#179376] text-[#179376] px-2 py-1 rounded hover:bg-[#b4ffee]"
+        >
+          <mat-icon>add</mat-icon> Leave
+        </a>
+        } @if(authService.isAdmin()){
+        <a
+          routerLink="events/new/{{ day.date | date : 'yyyy-MM-dd' }}"
+          class="flex items-center border-2 border-[#e2af18] text-[#e2af18] px-2 py-1 rounded hover:bg-[#fff0c7]"
+        >
+          <mat-icon>add</mat-icon> Event
+        </a>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="overflow-y-auto">
+    @for (item of day.events; track $index) {
+    <app-calendar-event-tile [calendarEvent]="item"></app-calendar-event-tile>
+    }
+  </div>
+</div>

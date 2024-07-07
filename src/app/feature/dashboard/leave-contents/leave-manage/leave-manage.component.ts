@@ -34,6 +34,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { AuthService } from '../../auth/auth.service';
 import { Leave } from '../../models/leave';
 import { LeaveStatus } from '../../constant/leave-status';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-leaverequest-manage',
@@ -53,6 +54,7 @@ import { LeaveStatus } from '../../constant/leave-status';
   styleUrls: ['./leave-manage.component.css'],
 })
 export class LeaveManageComponent implements OnInit {
+  sub: any;
   leaveDayType: typeof LeaveDayType = LeaveDayType;
   leaveDayTypeList: EnumSelectField[] = enumToIdNameArray(LeaveDayType);
   leaveHalfDayType: typeof LeaveHalfDayType = LeaveHalfDayType;
@@ -85,15 +87,19 @@ export class LeaveManageComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private leaveService: LeaveService,
     private employeeService: EmployeeService,
-    private datePipe: DatePipe,
     private leaveTypeService: LeaveTypeService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit() {
+    this.sub = this.route.params.subscribe((params) => {
+      this.leaveForm.controls.fromDate.setValue(params['date']);
+      this.leaveForm.controls.toDate.setValue(params['date']);
+    });
     this.getAllEmployees();
     this.getLeaveTypes();
   }
@@ -160,8 +166,8 @@ export class LeaveManageComponent implements OnInit {
         this.leaveTypes = res.data;
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -176,8 +182,8 @@ export class LeaveManageComponent implements OnInit {
             );
       },
       error: (error) => {
-        console.log(error.error.message);
-        this.toastr.error(error.error.message);
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
       },
     });
   }
@@ -194,7 +200,7 @@ export class LeaveManageComponent implements OnInit {
             this.setDataSource();
           },
           error: (error) => {
-            this.toastr.error(error.error.message);
+            this.toastr.error(error.error.message ?? error.message);
           },
         });
     }

@@ -1,0 +1,24 @@
+.cal-month-view .cal-day-cell {
+  height: 150px;
+  cursor: pointer;
+  overflow-x: hidden;
+}
+
+.cal-month-view .cal-cell-top {
+  min-height: 40px !important;
+}
+
+.button-group {
+  opacity: 0;
+  scale: 0.8;
+}
+
+.events-list {
+  opacity: 100;
+}
+
+.cal-month-view .cal-day-cell:hover .button-group {
+  opacity: 100;
+  scale: 1;
+  transition: 0.5s opacity, 0.3s scale;
+}
