@@ -15,11 +15,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { SystemUser } from '../../models/system-user';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { SystemUser, SystemUserListItem } from '../../models/system-user';
 import { CommonModule } from '@angular/common';
-import { SystemRole } from '../../constant/system-user-roles';
-import { ProfileForm } from '../../models/forms';
+import { SystemRole, SystemRoleId } from '../../constant/system-user-roles';
+import {
+  NewEmployeeForm,
+  ProfileForm,
+  UpdateEmployeeForm,
+} from '../../models/forms';
 import { CustomValidators } from '../../helper/validators';
 import { DataRecordStatus } from '../../constant/data-record-status';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -55,7 +59,7 @@ export class EmployeeDetailsComponent implements OnInit {
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   allEmployees: SystemUser[] = [];
   systemUser: SystemUser = {} as SystemUser;
-  profileUpdateForm: FormGroup<ProfileForm> = this.fb.group({
+  employeeUpdateForm: FormGroup<UpdateEmployeeForm> = this.fb.group({
     id: [0, [Validators.required]],
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
@@ -75,6 +79,7 @@ export class EmployeeDetailsComponent implements OnInit {
         disabled: !this.authService.isAdmin(),
       },
     ],
+    employeesUnderSupervision: this.fb.array([] as FormGroup<ProfileForm>[]),
   });
   statuses: StatusValue[] = [
     {
@@ -101,7 +106,8 @@ export class EmployeeDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.profileUpdateForm.disable();
+    this.employeeUpdateForm.disable();
+    this.employeeUpdateForm.controls.employeesUnderSupervision.disable();
     this.sub = this.route.params.subscribe((params) => {
       this.getEmployeeById(+params['id']);
     });
@@ -111,23 +117,49 @@ export class EmployeeDetailsComponent implements OnInit {
   toggleMode(isEditable: boolean) {
     this.isEditable = isEditable;
     if (isEditable) {
-      this.profileUpdateForm.enable();
+      this.employeeUpdateForm.enable();
       if (!this.authService.isAdmin()) {
-        this.profileUpdateForm.controls.supervisorId.disable();
-        this.profileUpdateForm.controls.status.disable();
+        this.employeeUpdateForm.controls.supervisorId.disable();
+        this.employeeUpdateForm.controls.status.disable();
+        this.employeeUpdateForm.controls.employeesUnderSupervision.disable();
       }
     } else {
       this.patchProfileUpdateForm(this.systemUser);
-      this.profileUpdateForm.disable();
+      this.employeeUpdateForm.disable();
+      this.employeeUpdateForm.controls.employeesUnderSupervision.disable();
     }
   }
 
+  createEmployeeUnderSupervisonForm(
+    systemUser: SystemUser
+  ): FormGroup<ProfileForm> {
+    return this.fb.group({
+      id: [systemUser.id, [Validators.required]],
+      firstName: [systemUser.firstName],
+      lastName: [systemUser.lastName],
+      email: [systemUser.email],
+      phoneNumber: [systemUser.phoneNumber || ''],
+      roleId: [systemUser.roleId as SystemRoleId],
+      status: [systemUser.status as DataRecordStatus],
+      supervisorId: [systemUser.supervisorId as number | null],
+    });
+  }
+
+  onEmployeesUnderSupervisionListChange(selectedEmployees: SystemUser[]): void {
+    this.employeeUpdateForm.controls.employeesUnderSupervision.clear();
+    selectedEmployees.forEach((option) => {
+      this.employeeUpdateForm.controls.employeesUnderSupervision.push(
+        this.createEmployeeUnderSupervisonForm(option)
+      );
+    });
+  }
+
   updateStatus(dataRecordStatus: DataRecordStatus) {
-    this.profileUpdateForm.controls.status.patchValue(dataRecordStatus);
+    this.employeeUpdateForm.controls.status.patchValue(dataRecordStatus);
   }
 
   patchProfileUpdateForm(systemUser: SystemUser) {
-    this.profileUpdateForm.patchValue({
+    this.employeeUpdateForm.patchValue({
       id: systemUser.id,
       firstName: systemUser.firstName,
       lastName: systemUser.lastName,
@@ -165,19 +197,20 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.profileUpdateForm.valid) {
-      const updateProfileData: SystemUser =
-        this.profileUpdateForm.getRawValue() as SystemUser;
-      this.employeeService.updateEmployee(updateProfileData).subscribe({
-        next: (res) => {
-          this.toastr.success(res.message);
-        },
-        error: (error) => {
-          console.log(error.error.message ?? error.message);
-          this.toastr.error(error.error.message ?? error.message);
-        },
-      });
-    }
+    console.log(this.employeeUpdateForm.getRawValue());
+    // if (this.employeeUpdateForm.valid) {
+    //   const updateProfileData: SystemUser =
+    //     this.employeeUpdateForm.getRawValue() as SystemUser;
+    //   this.employeeService.updateEmployee(updateProfileData).subscribe({
+    //     next: (res) => {
+    //       this.toastr.success(res.message);
+    //     },
+    //     error: (error) => {
+    //       console.log(error.error.message ?? error.message);
+    //       this.toastr.error(error.error.message ?? error.message);
+    //     },
+    //   });
+    // }
   }
 
   ngOnDestroy() {

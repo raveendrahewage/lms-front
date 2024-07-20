@@ -143,9 +143,9 @@
       </table>
     </div>
     <div class="mb-4 float-end">
-      @if(authService.getCurrentSystemUserId() ===
-      leave.employee?.supervisorId){ @switch
-      (leaveForm.controls.leaveStatus.value) { @case (leaveStatus.CANCELED) {
+      @if(authService.getCurrentSystemUserId() === leave.employee.supervisorId){
+      @switch (leaveForm.controls.leaveStatus.value) { @case
+      (leaveStatus.CANCELED) {
       <app-option-toggle
         [control]="leaveForm.controls.leaveStatus"
         [options]="[statuses[3]]"

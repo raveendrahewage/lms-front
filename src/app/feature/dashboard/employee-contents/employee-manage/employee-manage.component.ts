@@ -48,16 +48,9 @@ import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.
 export class EmployeeManageComponent implements OnInit {
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   systemRoleId: typeof SystemRoleId = SystemRoleId;
-  phide: boolean = true;
-  has_error = false;
-  create_employee_msg: string = '';
-
+  passwordHide: boolean = true;
   supervisorEmployees: Observable<any> = new Observable();
-  employeeinput$ = new Subject<string>();
   employeeSupervisor: SystemUser = {} as SystemUser;
-  isSelectLoading = false;
-
-  submitted = false;
   registerForm: FormGroup = new FormGroup({});
   allEmployees: SystemUser[] = [];
   newEmployeeForm: FormGroup<NewEmployeeForm> = this.fb.group({
@@ -130,8 +123,8 @@ export class EmployeeManageComponent implements OnInit {
 
   getAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
-      next: (data) => {
-        this.allEmployees = data.data;
+      next: (res) => {
+        this.allEmployees = res.data;
       },
       error: (error) => {
         console.log(error.error.message ?? error.message);
@@ -151,6 +144,10 @@ export class EmployeeManageComponent implements OnInit {
       this.employeeService.createEmployee(newEmployeeData).subscribe({
         next: (res) => {
           formDirective.resetForm();
+          this.newEmployeeForm.controls.roleId.setValue(SystemRoleId.USER);
+          this.newEmployeeForm.controls.status.setValue(
+            DataRecordStatus.ACTIVE
+          );
           this.toastr.success(res.message);
         },
         error: (error) => {

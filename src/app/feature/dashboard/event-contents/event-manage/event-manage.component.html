@@ -1,6 +1,7 @@
 <form
+  #formDirective="ngForm"
   [formGroup]="eventForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="onSubmit(formDirective)"
   class="w-1/2 mx-auto mt-5"
 >
   <div class="mb-4">

@@ -24,7 +24,7 @@
       </div>
       <div class="w-full md:w-2/3">
         <div class="profile-head">
-          <form [formGroup]="profileUpdateForm" (ngSubmit)="onSubmit()">
+          <form [formGroup]="employeeUpdateForm" (ngSubmit)="onSubmit()">
             <div class="form-group flex flex-wrap mb-4">
               <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
                 <mat-form-field appearance="outline" class="w-full">
@@ -100,10 +100,52 @@
               </div>
               <div class="w-full md:w-1/2">
                 <app-option-toggle
-                  [control]="profileUpdateForm.controls.status"
+                  [control]="employeeUpdateForm.controls.status"
                   [options]="statuses"
                 ></app-option-toggle>
               </div>
+            </div>
+            <div class="w-full mb-3">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Employees Under Supervision
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                @if(isEditable){
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label class="text-black">Employees</mat-label>
+                  <mat-select
+                    placeholder="Select employees"
+                    class="text-black"
+                    (selectionChange)="
+                      onEmployeesUnderSupervisionListChange($event.value)
+                    "
+                    multiple
+                  >
+                    @for (item of allEmployees; track $index) {
+                    <mat-option [value]="item">
+                      {{ item.fullName }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                } @else if(!isEditable &&
+                systemUser.employeesUnderSupervision?.length?? 0 > 0){ @for
+                (employee of systemUser.employeesUnderSupervision; track
+                employee; let i = $index) {
+                <p class="text-blue-500">
+                  {{ i + 1 }} .
+                  <a
+                    [routerLink]="['/dashboard/employees/details', employee.id]"
+                  >
+                    {{ employee.fullName }}
+                  </a>
+                </p>
+                } } @else if(!isEditable) {
+                <p>No employees under supervision</p>
+                }
+              </mat-expansion-panel>
             </div>
             <button
               mat-raised-button

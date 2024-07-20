@@ -64,7 +64,7 @@ export class MyProfileComponent implements OnInit {
   oldPasswordHide: boolean = true;
   newPasswordHide: boolean = true;
   confirmPasswordHide: boolean = true;
-  isEdit: boolean = false;
+  isEditable: boolean = false;
   systemUser: SystemUser = {} as SystemUser;
   allEmployees: SystemUser[] = [];
 
@@ -151,9 +151,9 @@ export class MyProfileComponent implements OnInit {
     this.getAllEmployees();
   }
 
-  toggleMode(isEdit: boolean) {
-    this.isEdit = isEdit;
-    if (isEdit) {
+  toggleMode(isEditable: boolean) {
+    this.isEditable = isEditable;
+    if (isEditable) {
       this.profileUpdateForm.enable();
       if (!this.authService.isAdmin()) {
         this.profileUpdateForm.controls.supervisorId.disable();

@@ -50,6 +50,7 @@ export class LeaveTypeDetailsComponent implements OnInit {
   leaveTypeUpdateForm: FormGroup<LeaveTypeForm> = this.fb.group({
     id: [0, [Validators.required]],
     name: ['', [Validators.required]],
+    defaultLeaveCount: [0, [Validators.required]],
     status: [DataRecordStatus.ACTIVE, [Validators.required]],
   });
   statuses: StatusValue[] = [

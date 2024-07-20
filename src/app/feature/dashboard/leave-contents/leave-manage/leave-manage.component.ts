@@ -195,6 +195,7 @@ export class LeaveManageComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.toastr.success(res.message);
+            this.leaveForm.controls.leaveStatus.setValue(LeaveStatus.PENDING);
             this.leaveForm.controls.dateWiseLeaves.clear();
             formDirective.resetForm();
             this.setDataSource();

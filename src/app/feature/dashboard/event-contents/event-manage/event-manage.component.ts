@@ -5,6 +5,7 @@ import {
   Validators,
   FormBuilder,
   ReactiveFormsModule,
+  FormGroupDirective,
 } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -89,11 +90,12 @@ export class EventManageComponent implements OnInit {
     this.eventForm.controls.eventStatus.patchValue(eventStatus);
   }
 
-  onSubmit() {
+  onSubmit(formDirective: FormGroupDirective) {
     if (this.eventForm.valid) {
       const eventFormData: Event = this.eventForm.getRawValue() as Event;
       this.eventService.createEvent(eventFormData).subscribe({
         next: (res) => {
+          formDirective.resetForm();
           this.toastr.success(res.message);
         },
         error: (error) => {

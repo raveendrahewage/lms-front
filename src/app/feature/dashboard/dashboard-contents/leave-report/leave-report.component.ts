@@ -104,7 +104,6 @@ export class LeaveReportComponent {
         value: item.count,
       });
     });
-    console.log(finalData);
     return finalData;
   }
 

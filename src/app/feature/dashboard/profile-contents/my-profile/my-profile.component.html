@@ -1,152 +1,161 @@
 <div class="content-box shadow-md mt-5 p-4">
-  <h3 class="mb-3 text-center text-primary">User Profile</h3>
   <div class="flex flex-wrap">
-    <div class="w-full md:w-1/6 flex flex-col items-center">
-      <div class="text-center p-4 rounded-lg flex flex-col items-center">
-        <img
-          src="./../../../../../favicon.ico"
-          class="profile-img min-w-full min-h-full rounded-full mx-auto mb-2"
-          alt="profile image"
-        />
-        <app-system-user-role-chip [role]="1"></app-system-user-role-chip>
-      </div>
-    </div>
-    <div class="w-full md:w-5/6">
+    <div class="w-full">
       <mat-tab-group [dynamicHeight]="true">
         <mat-tab label="Info">
-          <div class="flex flex-wrap">
-            <div class="w-full md:w-2/3 border-r border-gray-300 mb-2 p-4">
+          <div class="w-full mt-5">
+            <div class="p-4 bg-white rounded-lg">
               <button
-                class="p-2 mb-3 bg-slate-200 text-white rounded float-right border border-gray-300"
-                (click)="toggleMode(!isEdit)"
+                class="ml-3 p-2 bg-slate-200 text-white rounded float-right border border-gray-300"
+                (click)="toggleMode(!isEditable)"
+                [disabled]="
+                  !authService.isAdmin() &&
+                  authService.getCurrentSystemUserId() !== systemUser.id
+                "
               >
                 <mat-icon style="color: black">{{
-                  isEdit ? "close" : "edit"
+                  isEditable ? "close" : "edit"
                 }}</mat-icon>
               </button>
-              <form
-                [formGroup]="profileUpdateForm"
-                (ngSubmit)="updateProfile()"
-                class="w-full mt-3"
-              >
-                <div class="w-full form-group flex flex-wrap mb-4">
-                  <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label class="text-black">First Name</mat-label>
-                      <input
-                        matInput
-                        name="firstName"
-                        placeholder="Enter first name"
-                        formControlName="firstName"
-                        type="text"
-                        class="text-black"
-                      />
-                    </mat-form-field>
-                  </div>
-                  <div class="w-full md:w-1/2">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label class="text-black">Last Name</mat-label>
-                      <input
-                        matInput
-                        name="lastName"
-                        placeholder="Enter last name"
-                        formControlName="lastName"
-                        type="text"
-                        class="text-black"
-                      />
-                    </mat-form-field>
+              <div class="flex flex-wrap">
+                <div class="w-full md:w-1/3">
+                  <div class="profile-img mb-4 md:mb-0">
+                    <img
+                      src="../../../../../favicon.ico"
+                      class="employee-profile-img w-full h-auto rounded-full"
+                      alt="profile image"
+                    />
                   </div>
                 </div>
-                <div class="w-full form-group flex flex-wrap mb-4">
-                  <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label class="text-black">Phone Number</mat-label>
-                      <input
-                        matInput
-                        name="phoneNumber"
-                        placeholder="Enter phone number"
-                        formControlName="phoneNumber"
-                        type="text"
-                        class="text-black"
-                      />
-                    </mat-form-field>
-                  </div>
-                  <div class="w-full md:w-1/2">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label class="text-black">Email</mat-label>
-                      <input
-                        matInput
-                        name="email"
-                        placeholder="Enter email"
-                        formControlName="email"
-                        type="text"
-                        class="text-black"
-                      />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="w-full form-group flex flex-wrap mb-4">
-                  <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label class="text-black">Supervisor</mat-label>
-                      <mat-select
-                        formControlName="supervisorId"
-                        placeholder="Select a supervisor"
+                <div class="w-full md:w-2/3">
+                  <div class="profile-head">
+                    <form
+                      [formGroup]="profileUpdateForm"
+                      (ngSubmit)="updateProfile()"
+                    >
+                      <div class="form-group flex flex-wrap mb-4">
+                        <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label class="text-black">First Name</mat-label>
+                            <input
+                              matInput
+                              name="firstName"
+                              placeholder="Enter first name"
+                              formControlName="firstName"
+                              type="text"
+                              class="text-black"
+                            />
+                          </mat-form-field>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label class="text-black">Last Name</mat-label>
+                            <input
+                              matInput
+                              name="lastName"
+                              placeholder="Enter last name"
+                              formControlName="lastName"
+                              type="text"
+                              class="text-black"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="form-group flex flex-wrap mb-4">
+                        <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label class="text-black">Email</mat-label>
+                            <input
+                              matInput
+                              name="email"
+                              placeholder="Enter email"
+                              formControlName="email"
+                              type="text"
+                              class="text-black"
+                            />
+                          </mat-form-field>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label class="text-black"
+                              >Phone Number</mat-label
+                            >
+                            <input
+                              matInput
+                              name="phoneNumber"
+                              placeholder="Enter phone number"
+                              formControlName="phoneNumber"
+                              type="number"
+                              class="text-black"
+                            />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="form-group flex flex-wrap mb-4">
+                        <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label class="text-black">Supervisor</mat-label>
+                            <mat-select
+                              formControlName="supervisorId"
+                              placeholder="Select a supervisor"
+                              class="text-black"
+                            >
+                              @for (item of allEmployees; track $index) {
+                              <mat-option [value]="item.id">
+                                {{ item.fullName }}
+                              </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                          <app-option-toggle
+                            [control]="profileUpdateForm.controls.status"
+                            [options]="statuses"
+                          ></app-option-toggle>
+                        </div>
+                      </div>
+                      <div class="w-full mb-3">
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              Employees Under Supervision
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+                          @if(systemUser.employeesUnderSupervision?.length?? 0 >
+                          0){ @for (employee of
+                          systemUser.employeesUnderSupervision; track employee;
+                          let i = $index) {
+                          <div>
+                            <p class="text-blue-500">
+                              {{ i + 1 }} .
+                              <a
+                                [routerLink]="[
+                                  '/dashboard/employees/details',
+                                  employee.id
+                                ]"
+                              >
+                                {{ employee.fullName }}
+                              </a>
+                            </p>
+                          </div>
+                          } } @else {
+                          <p>No employees under supervision</p>
+                          }
+                        </mat-expansion-panel>
+                      </div>
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        class="mt-3 w-full bg-blue-500 text-white py-2 rounded"
+                        type="submit"
+                        [disabled]="!isEditable"
                       >
-                        @for (item of allEmployees; track $index;) {
-                        <mat-option
-                          [disabled]="systemUser.id == item.id"
-                          [value]="item.id"
-                          class="text-black"
-                        >
-                          {{ item.fullName }}
-                        </mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="w-full md:w-1/2">
-                    <app-option-toggle
-                      [control]="profileUpdateForm.controls.status"
-                      [options]="statuses"
-                    ></app-option-toggle>
+                        Save
+                      </button>
+                    </form>
                   </div>
                 </div>
-                <div class="w-full"></div>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mt-3 w-full bg-blue-500 text-white py-2 rounded"
-                  type="submit"
-                  [disabled]="!isEdit"
-                >
-                  Save
-                </button>
-              </form>
-            </div>
-            <div class="w-full md:w-1/3 p-3">
-              <div class="italic">
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Employees Under Supervision
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  @if(systemUser.employeesUnderSupervision?.length?? 0 > 0){
-                  @for (e of systemUser.employeesUnderSupervision; track e; let
-                  i = $index) {
-                  <div>
-                    <p class="text-blue-500">
-                      {{ i + 1 }} .
-                      <a [routerLink]="['/dashboard/employees/details', e.id]">
-                        {{ e.fullName }}
-                      </a>
-                    </p>
-                  </div>
-                  } } @else {
-                  <p>No employees under supervision</p>
-                  }
-                </mat-expansion-panel>
               </div>
             </div>
           </div>
@@ -158,16 +167,16 @@
         </mat-tab> -->
         <mat-tab label="Change Password">
           <ng-template matTabContent>
-            <div class="w-full md:w-1/2 p-4">
+            <div class="flex justify-center items-center w-full h-full p-4">
               <form
                 #formDirective="ngForm"
                 [formGroup]="resetPasswordForm"
                 (ngSubmit)="resetPassword(formDirective)"
-                class="w-full mt-3"
+                class="w-full md:w-1/2 mt-3"
               >
                 <div class="flex flex-wrap">
                   <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Odl Password</mat-label>
+                    <mat-label>Old Password</mat-label>
                     <input
                       matInput
                       name="oldPassword"

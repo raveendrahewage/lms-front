@@ -205,6 +205,7 @@ export class LeaveDetailsComponent implements OnInit {
       ? [...this.defaultColumns, ...this.conditionalColumns]
       : this.defaultColumns;
   }
+
   onLeaveDayTypeChange(event: MatSelectChange, index: number) {
     if (event.value === LeaveDayType.HALF_DAY)
       this.leaveForm.controls.dateWiseLeaves
@@ -217,6 +218,7 @@ export class LeaveDetailsComponent implements OnInit {
           LeaveQuarterDayType.FIRST_QUARTER
         );
   }
+
   createDateWiseLeave(
     dateWiseLeave: DateWiseLeave
   ): FormGroup<DateWiseLeaveForm> {
@@ -231,6 +233,7 @@ export class LeaveDetailsComponent implements OnInit {
       ],
     });
   }
+
   patchLeaveFrom(leave: Leave) {
     this.leaveForm.patchValue(leave);
     this.leaveForm.controls.dateWiseLeaves.clear();

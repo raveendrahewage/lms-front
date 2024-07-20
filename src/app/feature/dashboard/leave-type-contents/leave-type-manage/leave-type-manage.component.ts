@@ -5,6 +5,7 @@ import {
   Validators,
   FormBuilder,
   ReactiveFormsModule,
+  FormGroupDirective,
 } from '@angular/forms';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,6 +46,7 @@ export class LeaveTypeManageComponent {
   newLeaveTypeForm: FormGroup<LeaveTypeForm> = this.fb.group({
     id: [0, [Validators.required]],
     name: ['', [Validators.required]],
+    defaultLeaveCount: [0, [Validators.required]],
     status: [DataRecordStatus.ACTIVE, [Validators.required]],
   });
   statuses: StatusValue[] = [
@@ -73,12 +75,16 @@ export class LeaveTypeManageComponent {
     this.newLeaveTypeForm.controls.status.patchValue(dataRecordStatus);
   }
 
-  onSubmit() {
+  onSubmit(formDirective: FormGroupDirective) {
     if (this.newLeaveTypeForm.valid) {
       const updateProfileData: LeaveType =
         this.newLeaveTypeForm.getRawValue() as LeaveType;
       this.leaveTypeService.createLeaveType(updateProfileData).subscribe({
         next: (res) => {
+          formDirective.resetForm();
+          this.newLeaveTypeForm.controls.status.setValue(
+            DataRecordStatus.ACTIVE
+          );
           this.toastr.success(res.message);
         },
         error: (error) => {

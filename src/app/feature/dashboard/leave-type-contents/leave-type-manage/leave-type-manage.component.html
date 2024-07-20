@@ -1,6 +1,7 @@
 <form
+  #formDirective="ngForm"
   [formGroup]="newLeaveTypeForm"
-  (ngSubmit)="onSubmit()"
+  (ngSubmit)="onSubmit(formDirective)"
   class="w-1/2 mx-auto mt-5"
 >
   <div class="form-group flex flex-wrap mb-4">
@@ -15,7 +16,23 @@
         class="text-black"
       />
     </mat-form-field>
-    <div class="w-full flex first-line: justify-end">
+  </div>
+  <div class="w-full form-group flex flex-wrap mb-4">
+    <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-black">Default No. Of Leaves</mat-label>
+        <input
+          matInput
+          name="name"
+          placeholder="Enter name"
+          formControlName="defaultLeaveCount"
+          type="number"
+          min="0"
+          class="text-black"
+        />
+      </mat-form-field>
+    </div>
+    <div class="w-full md:w-1/2">
       <app-option-toggle
         [control]="newLeaveTypeForm.controls.status"
         [options]="statuses"

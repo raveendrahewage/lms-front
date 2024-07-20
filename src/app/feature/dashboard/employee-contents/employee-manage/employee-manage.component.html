@@ -98,10 +98,10 @@
                     name="oldPassword"
                     placeholder="Enter old password"
                     formControlName="password"
-                    [type]="phide ? 'password' : 'text'"
+                    [type]="passwordHide ? 'password' : 'text'"
                   />
-                  <mat-icon matSuffix (click)="phide = !phide">{{
-                    phide ? "visibility_off" : "visibility"
+                  <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{
+                    passwordHide ? "visibility_off" : "visibility"
                   }}</mat-icon>
                 </mat-form-field>
               </div>

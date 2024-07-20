@@ -8,6 +8,7 @@ import {
 } from '../constant/leave';
 import { LeaveStatus } from '../constant/leave-status';
 import { EventStatus } from '../constant/event-status';
+import { SystemUser } from './system-user';
 
 export interface SearchForm {
   searchTerm: FormControl<string>;
@@ -51,6 +52,9 @@ export interface ProfileForm {
 export interface NewEmployeeForm extends ProfileForm {
   password: FormControl<string | null>;
 }
+export interface UpdateEmployeeForm extends ProfileForm {
+  employeesUnderSupervision: FormArray<FormGroup<ProfileForm>>;
+}
 
 export interface LeaveForm {
   id: FormControl<number | null>;
@@ -77,6 +81,7 @@ export interface DateWiseLeaveForm {
 export interface LeaveTypeForm {
   id: FormControl<number | null>;
   name: FormControl<string | null>;
+  defaultLeaveCount: FormControl<number | null>;
   status: FormControl<DataRecordStatus | null>;
 }
 
