@@ -27,6 +27,8 @@ import { SystemRoleId } from '../../constant/system-user-roles';
 import { FormGroupDirective } from '@angular/forms';
 import { StatusValue } from '../../models/status-toggle';
 import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.component';
+import { RouterModule } from '@angular/router';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-employee-manage',
@@ -41,6 +43,8 @@ import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.
     MatSelectModule,
     MatIcon,
     OptionToggleComponent,
+    RouterModule,
+    MatExpansionModule,
   ],
   templateUrl: './employee-manage.component.html',
   styleUrls: ['./employee-manage.component.css'],
@@ -52,7 +56,8 @@ export class EmployeeManageComponent implements OnInit {
   supervisorEmployees: Observable<any> = new Observable();
   employeeSupervisor: SystemUser = {} as SystemUser;
   registerForm: FormGroup = new FormGroup({});
-  allEmployees: SystemUser[] = [];
+  employeesForSupervisionList: SystemUser[] = [];
+  employeesForUnderSupervisonList: SystemUser[] = [];
   newEmployeeForm: FormGroup<NewEmployeeForm> = this.fb.group({
     id: [0, [Validators.required]],
     firstName: ['', [Validators.required]],
@@ -73,6 +78,7 @@ export class EmployeeManageComponent implements OnInit {
     roleId: [SystemRoleId.USER, [Validators.required]],
     status: [DataRecordStatus.ACTIVE, [Validators.required]],
     supervisorId: [null as number | null],
+    employeesUnderSupervision: [[] as SystemUser[]],
   });
   statuses: StatusValue[] = [
     {
@@ -114,6 +120,13 @@ export class EmployeeManageComponent implements OnInit {
     this.getAllEmployees();
   }
 
+  employeeCompairerForUnderSupervisionList(
+    option: SystemUser,
+    value: SystemUser
+  ): boolean {
+    return option.id === value.id;
+  }
+
   updateStatus(status: DataRecordStatus) {
     this.newEmployeeForm.controls.status.patchValue(status);
   }
@@ -124,7 +137,12 @@ export class EmployeeManageComponent implements OnInit {
   getAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
       next: (res) => {
-        this.allEmployees = res.data;
+        this.employeesForSupervisionList = res.data.filter(
+          (emp) => emp.roleId != SystemRoleId.ADMIN
+        );
+        this.employeesForUnderSupervisonList = res.data.filter(
+          (emp) => emp.roleId != SystemRoleId.ADMIN
+        );
       },
       error: (error) => {
         console.log(error.error.message ?? error.message);

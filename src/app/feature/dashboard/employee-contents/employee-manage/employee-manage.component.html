@@ -82,7 +82,7 @@
                     placeholder="Select a supervisor"
                     class="text-black"
                   >
-                    @for (item of allEmployees; track $index) {
+                    @for (item of employeesForSupervisionList; track $index) {
                     <mat-option [value]="item.id">
                       {{ item.fullName }}
                     </mat-option>
@@ -105,6 +105,49 @@
                   }}</mat-icon>
                 </mat-form-field>
               </div>
+            </div>
+            <div class="w-full mb-6">
+              <mat-expansion-panel expanded>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Employees Under Supervision
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label class="text-black">Employees</mat-label>
+                  <mat-select
+                    placeholder="Select employees"
+                    class="text-black"
+                    formControlName="employeesUnderSupervision"
+                    [compareWith]="employeeCompairerForUnderSupervisionList"
+                    multiple
+                  >
+                    @for (employee of employeesForUnderSupervisonList; track
+                    $index) {
+                    <mat-option [value]="employee">
+                      {{ employee.fullName }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                @if(newEmployeeForm.controls.employeesUnderSupervision.value &&
+                newEmployeeForm.controls.employeesUnderSupervision.value.length
+                > 0){ @for (employee of
+                newEmployeeForm.controls.employeesUnderSupervision.value; track
+                employee; let i = $index) {
+                <p class="text-blue-500">
+                  {{ i + 1 }}.
+                  <a
+                    target="_blank"
+                    [routerLink]="['/dashboard/employees/details', employee.id]"
+                  >
+                    {{ employee.fullName }}
+                  </a>
+                </p>
+                } }@else {
+                <p>No employees under supervision</p>
+                }
+              </mat-expansion-panel>
             </div>
             <div class="w-full form-group flex flex-wrap mb-4">
               <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">

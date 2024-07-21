@@ -51,9 +51,10 @@ export interface ProfileForm {
 
 export interface NewEmployeeForm extends ProfileForm {
   password: FormControl<string | null>;
+  employeesUnderSupervision: FormControl<SystemUser[] | null>;
 }
 export interface UpdateEmployeeForm extends ProfileForm {
-  employeesUnderSupervision: FormArray<FormGroup<ProfileForm>>;
+  employeesUnderSupervision: FormControl<SystemUser[] | null>;
 }
 
 export interface LeaveForm {
