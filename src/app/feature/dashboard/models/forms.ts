@@ -49,12 +49,23 @@ export interface ProfileForm {
   supervisorId: FormControl<number | null>;
 }
 
+export interface LeaveAvailabilityForm {
+  year: FormControl<number | null>;
+  systemUserId: FormControl<number | null>;
+  leaveTypeId: FormControl<number | null>;
+  leaveCount: FormControl<number | null>;
+  bookedCount: FormControl<number | null>;
+  balanceCount: FormControl<number | null>;
+}
+
 export interface NewEmployeeForm extends ProfileForm {
   password: FormControl<string | null>;
   employeesUnderSupervision: FormControl<SystemUser[] | null>;
+  leaveAvailabilities: FormArray<FormGroup<LeaveAvailabilityForm>>;
 }
 export interface UpdateEmployeeForm extends ProfileForm {
   employeesUnderSupervision: FormControl<SystemUser[] | null>;
+  leaveAvailabilities: FormArray<FormGroup<LeaveAvailabilityForm>>;
 }
 
 export interface LeaveForm {

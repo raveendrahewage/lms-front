@@ -110,6 +110,14 @@
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     Employees Under Supervision
+                    <span
+                      class="inline-flex items-center justify-center bg-slate-500 text-white rounded-full m-2 px-2 text-sm font-semibold"
+                    >
+                      {{
+                        employeeUpdateForm.controls.employeesUnderSupervision
+                          .value?.length
+                      }}
+                    </span>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-form-field appearance="outline" class="w-full">
@@ -129,12 +137,9 @@
                     }
                   </mat-select>
                 </mat-form-field>
-                @if(employeeUpdateForm.controls.employeesUnderSupervision.value
-                &&
-                employeeUpdateForm.controls.employeesUnderSupervision.value.length
-                > 0){ @for (employee of
-                employeeUpdateForm.controls.employeesUnderSupervision.value;
-                track employee; let i = $index) {
+                @for (employee of
+                employeeUpdateForm.controls.employeesUnderSupervision.value ??
+                []; track employee; let i = $index) {
                 <p class="text-blue-500">
                   {{ i + 1 }}.
                   <a
@@ -144,9 +149,93 @@
                     {{ employee.fullName }}
                   </a>
                 </p>
-                } }@else {
-                <p>No employees under supervision</p>
                 }
+              </mat-expansion-panel>
+            </div>
+            <div class="w-full mb-6">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title> Leave Availability </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label class="text-black">Leave Types</mat-label>
+                  <mat-select
+                    placeholder="Select leave types"
+                    class="text-black"
+                    (selectionChange)="
+                      onLeaveTypeSelectionChanged($event.value)
+                    "
+                    multiple
+                  >
+                    @for (leaveType of leaveTypes; track $index) {
+                    <mat-option [value]="leaveType.id">
+                      {{ leaveType.name }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <table
+                  mat-table
+                  formArrayName="leaveAvailabilities"
+                  [dataSource]="leaveAvailabilityDataSource"
+                  class="w-full"
+                  matSort
+                >
+                  <ng-container matColumnDef="option">
+                    <td
+                      mat-cell
+                      *matCellDef="let row; let index = index"
+                      [formGroupName]="index"
+                    >
+                      <button (click)="removeLeaveAvailability(index)">
+                        <mat-icon class="text-black text-sm">close</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="leaveTypeName">
+                    <td
+                      mat-cell
+                      *matCellDef="let row; let index = index"
+                      [formGroupName]="index"
+                    >
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-select
+                          formControlName="leaveTypeId"
+                          class="text-black"
+                        >
+                          @for (item of leaveTypes; track $index) {
+                          <mat-option [value]="item.id">{{
+                            item.name
+                          }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="leaveCount">
+                    <td
+                      mat-cell
+                      *matCellDef="let row; let index = index"
+                      [formGroupName]="index"
+                    >
+                      <mat-form-field appearance="outline" class="w-full">
+                        <input
+                          matInput
+                          name="leaveCount"
+                          min="0"
+                          placeholder="Enter leave count"
+                          formControlName="leaveCount"
+                          type="number"
+                          class="text-black"
+                        />
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: leaveAvailabilityColumns"
+                  ></tr>
+                </table>
               </mat-expansion-panel>
             </div>
             <button

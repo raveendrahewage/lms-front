@@ -154,7 +154,7 @@ export class LeaveManageComponent implements OnInit {
     return this.fb.group({
       id: [0],
       leaveId: [0],
-      date: [date, [Validators.required]],
+      date: [{ value: date, disabled: true }, [Validators.required]],
       leaveDayType: [LeaveDayType.FULL_DAY, [Validators.required]],
       leaveHalfDayType: [null as LeaveHalfDayType | null],
       leaveQuarterDayType: [null as LeaveQuarterDayType | null],

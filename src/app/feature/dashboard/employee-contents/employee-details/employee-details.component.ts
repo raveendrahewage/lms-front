@@ -7,6 +7,7 @@ import {
   Validators,
   FormBuilder,
   ReactiveFormsModule,
+  AbstractControl,
 } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +21,7 @@ import { SystemUser, SystemUserListItem } from '../../models/system-user';
 import { CommonModule } from '@angular/common';
 import { SystemRole, SystemRoleId } from '../../constant/system-user-roles';
 import {
+  LeaveAvailabilityForm,
   NewEmployeeForm,
   ProfileForm,
   UpdateEmployeeForm,
@@ -31,6 +33,11 @@ import { MatIcon } from '@angular/material/icon';
 import { ToastrService } from 'ngx-toastr';
 import { StatusValue } from '../../models/status-toggle';
 import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.component';
+import { BehaviorSubject } from 'rxjs';
+import { MatTableModule } from '@angular/material/table';
+import { LeaveType } from '../../models/leave-type';
+import { LeaveTypeService } from '../../services/leave-type.service';
+import { LeaveAvailability } from '../../models/leave-availability';
 
 @Component({
   selector: 'app-employee-details',
@@ -49,6 +56,7 @@ import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.
     RouterModule,
     MatButtonToggleModule,
     OptionToggleComponent,
+    MatTableModule,
   ],
   templateUrl: './employee-details.component.html',
   styleUrls: ['./employee-details.component.css'],
@@ -58,8 +66,15 @@ export class EmployeeDetailsComponent implements OnInit {
   systemRoles: typeof SystemRole = SystemRole;
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   employeesForSupervisionList: SystemUser[] = [];
+  leaveTypes: LeaveType[] = [];
   employeesForUnderSupervisonList: SystemUser[] = [];
   systemUser: SystemUser = {} as SystemUser;
+  leaveAvailabilityDataSource = new BehaviorSubject<AbstractControl[]>([]);
+  leaveAvailabilityColumns: string[] = [
+    'option',
+    'leaveTypeName',
+    'leaveCount',
+  ];
   employeeUpdateForm: FormGroup<UpdateEmployeeForm> = this.fb.group({
     id: [0, [Validators.required]],
     firstName: ['', [Validators.required]],
@@ -81,6 +96,9 @@ export class EmployeeDetailsComponent implements OnInit {
       },
     ],
     employeesUnderSupervision: [[] as SystemUser[]],
+    leaveAvailabilities: this.fb.array(
+      [] as FormGroup<LeaveAvailabilityForm>[]
+    ),
   });
   statuses: StatusValue[] = [
     {
@@ -103,15 +121,18 @@ export class EmployeeDetailsComponent implements OnInit {
     private fb: FormBuilder,
     public authService: AuthService,
     private employeeService: EmployeeService,
+    private leaveTypeService: LeaveTypeService,
     private toastr: ToastrService
   ) {}
 
   ngOnInit() {
     this.employeeUpdateForm.disable();
+    this.employeeUpdateForm.controls.leaveAvailabilities.disable();
     this.sub = this.route.params.subscribe((params) => {
       this.getEmployeeById(+params['id']);
     });
     this.getAllEmployees();
+    this.getLeaveTypes();
   }
 
   employeeCompairerForUnderSupervisionList(
@@ -166,6 +187,62 @@ export class EmployeeDetailsComponent implements OnInit {
       status: systemUser.status,
       supervisorId: systemUser.supervisorId,
       employeesUnderSupervision: systemUser.employeesUnderSupervision ?? [],
+    });
+    for (let i = 0; i < systemUser.leaveAvailabilities.length; i++) {
+      this.employeeUpdateForm.controls.leaveAvailabilities.push(
+        this.createLeaveAvailability(systemUser.leaveAvailabilities[i])
+      );
+    }
+  }
+
+  setLeaveAvailabilityDataSource() {
+    this.leaveAvailabilityDataSource.next(
+      this.employeeUpdateForm.controls.leaveAvailabilities.controls
+    );
+  }
+
+  removeLeaveAvailability(index: number) {
+    this.employeeUpdateForm.controls.leaveAvailabilities.removeAt(index);
+    this.setLeaveAvailabilityDataSource();
+  }
+
+  onLeaveTypeSelectionChanged(leaveTypeIds: number[]) {
+    this.employeeUpdateForm.controls.leaveAvailabilities.clear();
+    for (let i = 0; i < leaveTypeIds.length; i++) {
+      this.employeeUpdateForm.controls.leaveAvailabilities.push(
+        this.createLeaveAvailability({
+          leaveTypeId: leaveTypeIds[i],
+        } as LeaveAvailability)
+      );
+    }
+    this.setLeaveAvailabilityDataSource();
+  }
+
+  createLeaveAvailability(
+    leaveAvailability: LeaveAvailability
+  ): FormGroup<LeaveAvailabilityForm> {
+    return this.fb.group({
+      year: [leaveAvailability.year, [Validators.required]],
+      systemUserId: [leaveAvailability.systemUserId],
+      leaveTypeId: [
+        { value: leaveAvailability.leaveTypeId, disabled: true },
+        [Validators.required],
+      ],
+      leaveCount: [leaveAvailability.leaveCount, [Validators.required]],
+      bookedCount: [leaveAvailability.bookedCount],
+      balanceCount: [leaveAvailability.balanceCount],
+    });
+  }
+
+  getLeaveTypes() {
+    this.leaveTypeService.getAllLeaveTypes().subscribe({
+      next: (res) => {
+        this.leaveTypes = res.data;
+      },
+      error: (error) => {
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
+      },
     });
   }
 

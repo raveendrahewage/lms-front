@@ -11,6 +11,7 @@ import { LeaveType } from '../models/leave-type';
 import { ApiResponse } from '../models/api-response';
 import { DataTableConfiguration } from '../models/data-table-configuration';
 import { DataTableResult } from '../models/data-table-result';
+import { LeaveAvailability } from '../models/leave-availability';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,15 @@ export class LeaveTypeService {
     return this.http
       .get<ApiResponse<LeaveType[]>>(
         `${Constant.API_ENDPOINT}/leave-type/get-leave-types`
+      )
+      .pipe(catchError(this.errorHandler));
+  }
+  getLeaveTypesForEmployee(
+    id: number
+  ): Observable<ApiResponse<LeaveAvailability[]>> {
+    return this.http
+      .get<ApiResponse<LeaveAvailability[]>>(
+        `${Constant.API_ENDPOINT}/leave-type/get-leave-types-for-employee/${id}`
       )
       .pipe(catchError(this.errorHandler));
   }

@@ -72,10 +72,10 @@ export class LeaveDetailsComponent implements OnInit {
   leaveQuarterDayType: typeof LeaveQuarterDayType = LeaveQuarterDayType;
   leaveQuarterDayTypeList: EnumSelectField[] =
     enumToIdNameArray(LeaveQuarterDayType);
-  dataSource = new BehaviorSubject<AbstractControl[]>([]);
-  defaultColumns: string[] = ['date', 'leaveDayType'];
-  conditionalColumns: string[] = ['leaveDayHalfOrQuarterType'];
-  displayColumns = [...this.defaultColumns];
+  dateWiseLeaveDataSourse = new BehaviorSubject<AbstractControl[]>([]);
+  dateWiseLeaveDefaultColumns: string[] = ['date', 'leaveDayType'];
+  dateWiseLeaveConditionalColumns: string[] = ['leaveDayHalfOrQuarterType'];
+  dateWiseLeavedisplayColumns = [...this.dateWiseLeaveDefaultColumns];
   leave: Leave = {} as Leave;
   leaveTypes: LeaveType[] = [];
   allEmployees: SystemUser[] = [];
@@ -195,15 +195,20 @@ export class LeaveDetailsComponent implements OnInit {
   updateStatus(status: LeaveStatus) {
     this.leaveForm.controls.leaveStatus.patchValue(status);
   }
-  setDataSource() {
-    this.dataSource.next(this.leaveForm.controls.dateWiseLeaves.controls);
+  setDateWiseLeaveDataSource() {
+    this.dateWiseLeaveDataSourse.next(
+      this.leaveForm.controls.dateWiseLeaves.controls
+    );
   }
   getDisplayColumns() {
     return this.leaveForm.controls.dateWiseLeaves.controls.some(
       (c) => c.controls.leaveDayType.value !== LeaveDayType.FULL_DAY
     )
-      ? [...this.defaultColumns, ...this.conditionalColumns]
-      : this.defaultColumns;
+      ? [
+          ...this.dateWiseLeaveDefaultColumns,
+          ...this.dateWiseLeaveConditionalColumns,
+        ]
+      : this.dateWiseLeaveDefaultColumns;
   }
 
   onLeaveDayTypeChange(event: MatSelectChange, index: number) {
@@ -225,7 +230,10 @@ export class LeaveDetailsComponent implements OnInit {
     return this.fb.group({
       id: [dateWiseLeave.id],
       leaveId: [dateWiseLeave.leaveId],
-      date: [dateWiseLeave.date, [Validators.required]],
+      date: [
+        { value: dateWiseLeave.date, disabled: true },
+        [Validators.required],
+      ],
       leaveDayType: [dateWiseLeave.leaveDayType, [Validators.required]],
       leaveHalfDayType: [dateWiseLeave.leaveHalfDayType as LeaveHalfDayType],
       leaveQuarterDayType: [
@@ -242,7 +250,7 @@ export class LeaveDetailsComponent implements OnInit {
         this.createDateWiseLeave(leave.dateWiseLeaves[i])
       );
     }
-    this.setDataSource();
+    this.setDateWiseLeaveDataSource();
   }
 
   openConfirmationDialog(status: string): void {
@@ -320,7 +328,7 @@ export class LeaveDetailsComponent implements OnInit {
         next: (res) => {
           this.toastr.success(res.message);
           this.leaveForm.controls.dateWiseLeaves.clear();
-          this.setDataSource();
+          this.setDateWiseLeaveDataSource();
         },
         error: (error) => {
           this.toastr.error(error.error.message ?? error.message);

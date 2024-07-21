@@ -107,7 +107,21 @@
           *matCellDef="let row; let index = index"
           [formGroupName]="index"
         >
-          {{ row.controls.date.value | date : "EEE dd-MMM-yyyy" }}
+          <mat-form-field appearance="outline" class="w-full">
+            <input
+              matInput
+              [matDatepicker]="pickerDate"
+              id="toDate"
+              formControlName="date"
+              placeholder="Date To"
+              class="text-black"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerDate></mat-datepicker>
+          </mat-form-field>
         </td>
       </ng-container>
       <ng-container matColumnDef="leaveDayType">
@@ -116,14 +130,16 @@
           *matCellDef="let row; let index = index"
           [formGroupName]="index"
         >
-          <mat-select
-            formControlName="leaveDayType"
-            (selectionChange)="onLeaveDayTypeChange($event, index)"
-          >
-            @for (item of leaveDayTypeList; track $index) {
-            <mat-option [value]="item.id">{{ item.name }}</mat-option>
-            }
-          </mat-select>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-select
+              formControlName="leaveDayType"
+              (selectionChange)="onLeaveDayTypeChange($event, index)"
+            >
+              @for (item of leaveDayTypeList; track $index) {
+              <mat-option [value]="item.id">{{ item.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         </td>
       </ng-container>
       <ng-container matColumnDef="leaveDayHalfOrQuarterType">
@@ -134,23 +150,27 @@
         >
           @switch (row.controls.leaveDayType.value) { @case
           (leaveDayType.HALF_DAY) {
-          <mat-select
-            [(value)]="leaveHalfDayType.FIRST_HALF"
-            formControlName="leaveHalfDayType"
-          >
-            @for (item of leaveHalfDayTypeList; track $index) {
-            <mat-option [value]="item.id">{{ item.name }}</mat-option>
-            }
-          </mat-select>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-select
+              [(value)]="leaveHalfDayType.FIRST_HALF"
+              formControlName="leaveHalfDayType"
+            >
+              @for (item of leaveHalfDayTypeList; track $index) {
+              <mat-option [value]="item.id">{{ item.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
           }@case (leaveDayType.QUARTER_DAY) {
-          <mat-select
-            [(value)]="leaveQuarterDayType.FIRST_QUARTER"
-            formControlName="leaveQuarterDayType"
-          >
-            @for (item of leaveQuarterDayTypeList; track $index) {
-            <mat-option [value]="item.id">{{ item.name }}</mat-option>
-            }
-          </mat-select>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-select
+              [(value)]="leaveQuarterDayType.FIRST_QUARTER"
+              formControlName="leaveQuarterDayType"
+            >
+              @for (item of leaveQuarterDayTypeList; track $index) {
+              <mat-option [value]="item.id">{{ item.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
           } }
         </td>
       </ng-container>
