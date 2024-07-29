@@ -142,6 +142,11 @@ export class EmployeeManageComponent implements OnInit {
     this.getLeaveTypes();
   }
 
+  getLeaveTypeName(leaveTypeId: number): string {
+    const leaveType = this.leaveTypes.find((type) => type.id === leaveTypeId);
+    return leaveType ? leaveType.name : '';
+  }
+
   employeeCompairerForUnderSupervisionList(
     option: SystemUser,
     value: SystemUser
@@ -167,27 +172,27 @@ export class EmployeeManageComponent implements OnInit {
     this.setLeaveAvailabilityDataSource();
   }
 
-  onLeaveTypeSelectionChanged(leaveTypeIds: number[]) {
+  onLeaveTypeSelectionChanged(leaveTypes: LeaveType[]) {
     this.newEmployeeForm.controls.leaveAvailabilities.clear();
-    for (let i = 0; i < leaveTypeIds.length; i++) {
+    for (let i = 0; i < leaveTypes.length; i++) {
       this.newEmployeeForm.controls.leaveAvailabilities.push(
-        this.createLeaveAvailability(leaveTypeIds[i])
+        this.createLeaveAvailability(leaveTypes[i])
       );
     }
     this.setLeaveAvailabilityDataSource();
   }
 
   createLeaveAvailability(
-    leaveTypeId: number
+    leaveType: LeaveType
   ): FormGroup<LeaveAvailabilityForm> {
     return this.fb.group({
-      year: [null as number | null, [Validators.required]],
+      year: [new Date().getFullYear(), [Validators.required]],
       systemUserId: [this.authService.getCurrentSystemUserId()],
-      leaveTypeId: [
-        { value: leaveTypeId, disabled: true },
-        [Validators.required],
+      leaveTypeId: [leaveType.id, [Validators.required]],
+      leaveCount: [
+        leaveType.defaultLeaveCount,
+        [Validators.required, Validators.min(1)],
       ],
-      leaveCount: [0, [Validators.required]],
       bookedCount: [0],
       balanceCount: [0],
     });

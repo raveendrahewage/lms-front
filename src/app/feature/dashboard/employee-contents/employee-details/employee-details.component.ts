@@ -63,6 +63,8 @@ import { LeaveAvailability } from '../../models/leave-availability';
 })
 export class EmployeeDetailsComponent implements OnInit {
   sub: any;
+  employeeId: number = 0;
+  leaveAvailabilities: number[] = [];
   systemRoles: typeof SystemRole = SystemRole;
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
   employeesForSupervisionList: SystemUser[] = [];
@@ -129,10 +131,16 @@ export class EmployeeDetailsComponent implements OnInit {
     this.employeeUpdateForm.disable();
     this.employeeUpdateForm.controls.leaveAvailabilities.disable();
     this.sub = this.route.params.subscribe((params) => {
+      this.employeeId = +params['id'];
       this.getEmployeeById(+params['id']);
     });
     this.getAllEmployees();
     this.getLeaveTypes();
+  }
+
+  getLeaveTypeName(leaveTypeId: number): string {
+    const leaveType = this.leaveTypes.find((type) => type.id === leaveTypeId);
+    return leaveType ? leaveType.name : '';
   }
 
   employeeCompairerForUnderSupervisionList(
@@ -140,6 +148,13 @@ export class EmployeeDetailsComponent implements OnInit {
     value: SystemUser
   ): boolean {
     return option.id === value.id;
+  }
+
+  leaveTypeCompairerForLeaveAvailabilities(
+    option: LeaveType,
+    value: number
+  ): boolean {
+    return option.id === value;
   }
 
   toggleMode(isEditable: boolean) {
@@ -150,6 +165,7 @@ export class EmployeeDetailsComponent implements OnInit {
         this.employeeUpdateForm.controls.supervisorId.disable();
         this.employeeUpdateForm.controls.status.disable();
         this.employeeUpdateForm.controls.employeesUnderSupervision.disable();
+        this.employeeUpdateForm.controls.leaveAvailabilities.disable();
       }
     } else {
       this.patchProfileUpdateForm(this.systemUser);
@@ -177,22 +193,18 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   patchProfileUpdateForm(systemUser: SystemUser) {
-    this.employeeUpdateForm.patchValue({
-      id: systemUser.id,
-      firstName: systemUser.firstName,
-      lastName: systemUser.lastName,
-      email: systemUser.email,
-      phoneNumber: systemUser.phoneNumber || '',
-      roleId: systemUser.roleId,
-      status: systemUser.status,
-      supervisorId: systemUser.supervisorId,
-      employeesUnderSupervision: systemUser.employeesUnderSupervision ?? [],
-    });
+    this.employeeUpdateForm.patchValue(systemUser);
+    this.employeeUpdateForm.controls.leaveAvailabilities.clear();
+    this.leaveAvailabilities = [];
     for (let i = 0; i < systemUser.leaveAvailabilities.length; i++) {
+      this.leaveAvailabilities.push(
+        systemUser.leaveAvailabilities[i].leaveTypeId
+      );
       this.employeeUpdateForm.controls.leaveAvailabilities.push(
         this.createLeaveAvailability(systemUser.leaveAvailabilities[i])
       );
     }
+    this.setLeaveAvailabilityDataSource();
   }
 
   setLeaveAvailabilityDataSource() {
@@ -206,12 +218,17 @@ export class EmployeeDetailsComponent implements OnInit {
     this.setLeaveAvailabilityDataSource();
   }
 
-  onLeaveTypeSelectionChanged(leaveTypeIds: number[]) {
+  onLeaveTypeSelectionChanged(leaveTypes: LeaveType[]) {
     this.employeeUpdateForm.controls.leaveAvailabilities.clear();
-    for (let i = 0; i < leaveTypeIds.length; i++) {
+    for (let i = 0; i < leaveTypes.length; i++) {
       this.employeeUpdateForm.controls.leaveAvailabilities.push(
         this.createLeaveAvailability({
-          leaveTypeId: leaveTypeIds[i],
+          year: new Date().getFullYear(),
+          leaveTypeId: leaveTypes[i].id,
+          leaveCount: leaveTypes[i].defaultLeaveCount,
+          balanceCount: 0,
+          bookedCount: 0,
+          systemUserId: this.employeeId,
         } as LeaveAvailability)
       );
     }
@@ -224,11 +241,11 @@ export class EmployeeDetailsComponent implements OnInit {
     return this.fb.group({
       year: [leaveAvailability.year, [Validators.required]],
       systemUserId: [leaveAvailability.systemUserId],
-      leaveTypeId: [
-        { value: leaveAvailability.leaveTypeId, disabled: true },
-        [Validators.required],
+      leaveTypeId: [leaveAvailability.leaveTypeId, [Validators.required]],
+      leaveCount: [
+        { value: leaveAvailability.leaveCount, disabled: !this.isEditable },
+        [Validators.required, Validators.min(1)],
       ],
-      leaveCount: [leaveAvailability.leaveCount, [Validators.required]],
       bookedCount: [leaveAvailability.bookedCount],
       balanceCount: [leaveAvailability.balanceCount],
     });

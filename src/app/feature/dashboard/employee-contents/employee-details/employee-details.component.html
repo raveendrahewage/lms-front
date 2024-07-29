@@ -160,15 +160,18 @@
                 <mat-form-field appearance="outline" class="w-full">
                   <mat-label class="text-black">Leave Types</mat-label>
                   <mat-select
+                    multiple
                     placeholder="Select leave types"
                     class="text-black"
                     (selectionChange)="
                       onLeaveTypeSelectionChanged($event.value)
                     "
-                    multiple
+                    [value]="leaveAvailabilities"
+                    [compareWith]="leaveTypeCompairerForLeaveAvailabilities"
+                    [disabled]="!isEditable"
                   >
                     @for (leaveType of leaveTypes; track $index) {
-                    <mat-option [value]="leaveType.id">
+                    <mat-option [value]="leaveType">
                       {{ leaveType.name }}
                     </mat-option>
                     }
@@ -187,7 +190,10 @@
                       *matCellDef="let row; let index = index"
                       [formGroupName]="index"
                     >
-                      <button (click)="removeLeaveAvailability(index)">
+                      <button
+                        [disabled]="!isEditable"
+                        (click)="removeLeaveAvailability(index)"
+                      >
                         <mat-icon class="text-black text-sm">close</mat-icon>
                       </button>
                     </td>
@@ -198,18 +204,7 @@
                       *matCellDef="let row; let index = index"
                       [formGroupName]="index"
                     >
-                      <mat-form-field appearance="outline" class="w-full">
-                        <mat-select
-                          formControlName="leaveTypeId"
-                          class="text-black"
-                        >
-                          @for (item of leaveTypes; track $index) {
-                          <mat-option [value]="item.id">{{
-                            item.name
-                          }}</mat-option>
-                          }
-                        </mat-select>
-                      </mat-form-field>
+                      {{ getLeaveTypeName(row.controls.leaveTypeId.value) }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="leaveCount">
