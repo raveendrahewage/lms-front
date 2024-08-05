@@ -7,7 +7,8 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Constant } from '../constant/constant';
-import { Leave, LeaveListItem } from '../models/leave';
+import { Leave } from '../models/schemas/leave';
+import { LeaveListItem } from '../models/leave-list-item';
 import { DataTableConfiguration } from '../models/data-table-configuration';
 import { LeaveFetchingMode } from '../constant/leave';
 import { DataTableResult } from '../models/data-table-result';

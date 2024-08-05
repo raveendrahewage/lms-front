@@ -7,11 +7,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Constant } from '../constant/constant';
-import { LeaveType } from '../models/leave-type';
+import { LeaveType } from '../models/schemas/leave-type';
 import { ApiResponse } from '../models/api-response';
 import { DataTableConfiguration } from '../models/data-table-configuration';
 import { DataTableResult } from '../models/data-table-result';
-import { Event } from '../models/event';
+import { Event } from '../models/schemas/event';
 import { CalendarEvent } from '../models/calendar-event';
 
 @Injectable({

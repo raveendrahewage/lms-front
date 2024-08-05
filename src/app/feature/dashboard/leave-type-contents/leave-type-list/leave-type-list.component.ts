@@ -20,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 import { capitalizeFirstLetter } from '../../helper/string-formatter';
 import { getEnumValueByName } from '../../helper/enum-helper';
 import { LeaveTypeService } from '../../services/leave-type.service';
-import { LeaveType } from '../../models/leave-type';
+import { LeaveType } from '../../models/schemas/leave-type';
 import { DataRecordStatusChipComponent } from '../../shared/data-record-status-chip/data-record-status-chip.component';
 
 @Component({

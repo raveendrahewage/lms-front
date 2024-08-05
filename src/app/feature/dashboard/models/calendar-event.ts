@@ -1,7 +1,7 @@
 import { CalendarEventType } from '../constant/calendar-event-type';
 import { CalendarEvent as CalEvent } from 'angular-calendar';
-import { Event } from './event';
-import { Leave } from './leave';
+import { Event } from './schemas/event';
+import { Leave } from './schemas/leave';
 
 export interface CalendarEvent {
   calendarEventId: number;

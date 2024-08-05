@@ -1,4 +1,4 @@
-import { SystemUser } from './system-user';
+import { SystemUser } from './schemas/system-user';
 
 export interface ApiResponse<T> {
   success: boolean;

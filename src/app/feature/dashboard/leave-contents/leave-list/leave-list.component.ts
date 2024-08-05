@@ -21,7 +21,7 @@ import { capitalizeFirstLetter } from '../../helper/string-formatter';
 import { getEnumValueByName } from '../../helper/enum-helper';
 import { SystemRoleId } from '../../constant/system-user-roles';
 import { MatTabsModule } from '@angular/material/tabs';
-import { LeaveListItem } from '../../models/leave';
+import { LeaveListItem } from '../../models/leave-list-item';
 import { LeaveFetchingMode } from '../../constant/leave';
 import { AuthService } from '../../auth/auth.service';
 import { LeaveService } from '../../services/leave.service';

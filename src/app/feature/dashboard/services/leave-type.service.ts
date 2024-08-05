@@ -7,11 +7,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Constant } from '../constant/constant';
-import { LeaveType } from '../models/leave-type';
+import { LeaveType } from '../models/schemas/leave-type';
 import { ApiResponse } from '../models/api-response';
 import { DataTableConfiguration } from '../models/data-table-configuration';
 import { DataTableResult } from '../models/data-table-result';
-import { LeaveAvailability } from '../models/leave-availability';
+import { LeaveAvailability } from '../models/schemas/leave-availability';
 
 @Injectable({
   providedIn: 'root',

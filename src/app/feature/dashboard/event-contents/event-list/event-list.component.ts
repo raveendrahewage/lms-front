@@ -20,9 +20,10 @@ import { ToastrService } from 'ngx-toastr';
 import { capitalizeFirstLetter } from '../../helper/string-formatter';
 import { getEnumValueByName } from '../../helper/enum-helper';
 import { EventService } from '../../services/event.service';
-import { Event } from '../../models/event';
+import { Event } from '../../models/schemas/event';
 import { CommonModule } from '@angular/common';
 import { EventStatusChipComponent } from '../../shared/event-status-chip/event-status-chip.component';
+import { EventModeChipComponent } from '../../shared/event-mode-chip/event-mode-chip.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -39,6 +40,7 @@ import { EventStatusChipComponent } from '../../shared/event-status-chip/event-s
     MatPaginatorModule,
     RouterModule,
     EventStatusChipComponent,
+    EventModeChipComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.css'],
@@ -60,6 +62,7 @@ export class EventListComponent implements OnInit {
     'description',
     'startDate',
     'endDate',
+    'eventMode',
     'eventStatus',
     'options',
   ];

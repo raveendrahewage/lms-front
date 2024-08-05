@@ -95,6 +95,19 @@
         {{ event.endDate | date : "EEE dd-MMM-yyyy" }}
       </td>
     </ng-container>
+    <ng-container matColumnDef="eventMode">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="cursor-pointer px-4 py-2"
+      >
+        Mode
+      </th>
+      <td mat-cell *matCellDef="let event" class="px-4 py-2">
+        <app-event-mode-chip [event]="event"> </app-event-mode-chip>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="eventStatus">
       <th
         mat-header-cell

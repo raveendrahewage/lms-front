@@ -10,7 +10,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { LeaveTypeService } from '../../services/leave-type.service';
-import { LeaveType } from '../../models/leave-type';
+import { LeaveType } from '../../models/schemas/leave-type';
 import { LeaveService } from '../../services/leave.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -29,10 +29,10 @@ import {
 } from '../../constant/leave';
 import { EnumSelectField } from '../../models/enum-select-field';
 import { enumToIdNameArray } from '../../helper/enum-helper';
-import { SystemUser } from '../../models/system-user';
+import { SystemUser } from '../../models/schemas/system-user';
 import { EmployeeService } from '../../services/employee.service';
 import { AuthService } from '../../auth/auth.service';
-import { Leave } from '../../models/leave';
+import { Leave } from '../../models/schemas/leave';
 import { LeaveStatus } from '../../constant/leave-status';
 import { ActivatedRoute } from '@angular/router';
 

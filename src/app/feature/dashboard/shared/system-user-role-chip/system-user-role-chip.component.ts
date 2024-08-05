@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SystemRoleId } from '../../constant/system-user-roles';
+import { SystemRole, SystemRoleId } from '../../constant/system-user-roles';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -12,4 +12,31 @@ import { MatIcon } from '@angular/material/icon';
 export class SystemUserRoleChipComponent {
   @Input() role!: SystemRoleId;
   systemRoleId: typeof SystemRoleId = SystemRoleId;
+
+  getUserClass(): string {
+    switch (this.role) {
+      case SystemRoleId.ADMIN:
+        return 'bg-[darkgoldenrod]';
+      case SystemRoleId.USER:
+        return 'bg-[darkseagreen]';
+    }
+  }
+
+  getUserText(): string {
+    switch (this.role) {
+      case SystemRoleId.ADMIN:
+        return 'Admin';
+      case SystemRoleId.USER:
+        return 'User';
+    }
+  }
+
+  getUserIcon(): string {
+    switch (this.role) {
+      case SystemRoleId.ADMIN:
+        return 'admin_panel_settings';
+      case SystemRoleId.USER:
+        return 'person';
+    }
+  }
 }

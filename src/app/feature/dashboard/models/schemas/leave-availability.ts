@@ -1,4 +1,4 @@
-import { DataRecord } from './data-record';
+import { DataRecord } from '../data-record';
 import { LeaveType } from './leave-type';
 import { SystemUser } from './system-user';
 

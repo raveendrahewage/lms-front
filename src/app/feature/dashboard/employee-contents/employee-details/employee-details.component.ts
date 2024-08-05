@@ -16,8 +16,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { SystemUser, SystemUserListItem } from '../../models/system-user';
+import { MatSelectModule } from '@angular/material/select';
+import { SystemUser } from '../../models/schemas/system-user';
 import { CommonModule } from '@angular/common';
 import { SystemRole, SystemRoleId } from '../../constant/system-user-roles';
 import {
@@ -35,9 +35,9 @@ import { StatusValue } from '../../models/status-toggle';
 import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.component';
 import { BehaviorSubject } from 'rxjs';
 import { MatTableModule } from '@angular/material/table';
-import { LeaveType } from '../../models/leave-type';
+import { LeaveType } from '../../models/schemas/leave-type';
 import { LeaveTypeService } from '../../services/leave-type.service';
-import { LeaveAvailability } from '../../models/leave-availability';
+import { LeaveAvailability } from '../../models/schemas/leave-availability';
 
 @Component({
   selector: 'app-employee-details',

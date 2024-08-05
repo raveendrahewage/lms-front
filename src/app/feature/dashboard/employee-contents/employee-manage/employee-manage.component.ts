@@ -16,7 +16,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { Observable, concat, of, Subject, BehaviorSubject } from 'rxjs';
 import { EmployeeService } from './../../services/employee.service';
 import { Component, OnInit } from '@angular/core';
-import { NewSystemUser, SystemUser } from '../../models/system-user';
+import { SystemUser } from '../../models/schemas/system-user';
+import { NewSystemUser } from '../../models/new-system-user';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +36,7 @@ import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.
 import { RouterModule } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LeaveTypeService } from '../../services/leave-type.service';
-import { LeaveType } from '../../models/leave-type';
+import { LeaveType } from '../../models/schemas/leave-type';
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 

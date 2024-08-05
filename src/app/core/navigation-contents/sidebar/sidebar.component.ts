@@ -3,10 +3,7 @@ import { SidebarService } from '../service/sidebar.service';
 import { RouterModule } from '@angular/router';
 import { RouteLink } from '../../../feature/dashboard/models/route';
 import { AuthService } from '../../../feature/dashboard/auth/auth.service';
-import {
-  adminRoutes,
-  userRoutes,
-} from '../../../feature/dashboard/constant/routes';
+import { sidebarRoutes } from '../../../feature/dashboard/constant/routes';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,12 +14,9 @@ import {
 })
 export class SidebarComponent implements OnInit {
   isOpen = false;
-  routes: RouteLink[] = this.authService.isAdmin() ? adminRoutes : userRoutes;
+  routes: RouteLink[] = sidebarRoutes;
 
-  constructor(
-    private authService: AuthService,
-    private sidebarService: SidebarService
-  ) {}
+  constructor(private sidebarService: SidebarService) {}
   ngOnInit() {
     this.sidebarService.change.subscribe((isOpen) => {
       this.isOpen = isOpen;

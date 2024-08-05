@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthResult } from '../models/api-response';
 import { ApiResponse } from '../models/api-response';
-import { SystemUser } from '../models/system-user';
+import { SystemUser } from '../models/schemas/system-user';
 import { SystemRole } from '../constant/system-user-roles';
 
 @Injectable({

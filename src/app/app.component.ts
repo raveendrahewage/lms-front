@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './feature/dashboard/auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
-import { SystemUser } from './feature/dashboard/models/system-user';
+import { SystemUser } from './feature/dashboard/models/schemas/system-user';
 import { Constant } from './feature/dashboard/constant/constant';
 
 @Component({

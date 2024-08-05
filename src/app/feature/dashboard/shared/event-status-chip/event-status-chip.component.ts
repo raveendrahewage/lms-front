@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EventStatus } from '../../constant/event-status';
-import { Event } from '../../models/event';
+import { Event } from '../../models/schemas/event';
 
 @Component({
   selector: 'app-event-status-chip',

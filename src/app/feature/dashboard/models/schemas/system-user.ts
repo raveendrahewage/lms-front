@@ -1,4 +1,4 @@
-import { DataRecord } from './data-record';
+import { DataRecord } from '../data-record';
 import { Leave } from './leave';
 import { LeaveAvailability } from './leave-availability';
 import { SystemRole } from './system-role';
@@ -18,17 +18,4 @@ export interface SystemUser extends DataRecord {
   leaves: Leave[];
   reviewedLeaves: Leave[];
   leaveAvailabilities: LeaveAvailability[];
-}
-
-export interface NewSystemUser extends SystemUser {
-  password: string;
-}
-export interface SystemUserListItem extends DataRecord {
-  id: number;
-  email: string;
-  phoneNumber?: string | null;
-  roleId: number;
-  roleName: string;
-  supervisorId?: number | null;
-  supervisorName: string | null;
 }

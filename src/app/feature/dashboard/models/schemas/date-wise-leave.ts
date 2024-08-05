@@ -2,8 +2,8 @@ import {
   LeaveDayType,
   LeaveHalfDayType,
   LeaveQuarterDayType,
-} from '../constant/leave';
-import { DataRecord } from './data-record';
+} from '../../constant/leave';
+import { DataRecord } from '../data-record';
 import { Leave } from './leave';
 
 export interface DateWiseLeave extends DataRecord {

@@ -1,4 +1,4 @@
-import { DataRecord } from './data-record';
+import { DataRecord } from '../data-record';
 import { SystemUser } from './system-user';
 
 export interface SystemRole extends DataRecord {

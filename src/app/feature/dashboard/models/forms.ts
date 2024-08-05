@@ -8,7 +8,8 @@ import {
 } from '../constant/leave';
 import { LeaveStatus } from '../constant/leave-status';
 import { EventStatus } from '../constant/event-status';
-import { SystemUser } from './system-user';
+import { SystemUser } from './schemas/system-user';
+import { EventMode } from '../constant/event-mode';
 
 export interface SearchForm {
   searchTerm: FormControl<string>;
@@ -104,4 +105,5 @@ export interface EventForm {
   startDate: FormControl<Date | null>;
   endDate: FormControl<Date | null>;
   eventStatus: FormControl<EventStatus | null>;
+  eventMode: FormControl<EventMode | null>;
 }

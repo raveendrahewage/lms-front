@@ -14,7 +14,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { SystemUserListItem } from '../../models/system-user';
+import { SystemUserListItem } from '../../models/system-user-list-item';
 import { SearchForm } from '../../models/forms';
 import { DataTableConfiguration } from '../../models/data-table-configuration';
 import { SortMode } from '../../constant/sort-mode';

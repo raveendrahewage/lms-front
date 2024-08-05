@@ -20,7 +20,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ToastrService } from 'ngx-toastr';
 import { StatusValue } from '../../models/status-toggle';
 import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.component';
-import { LeaveType } from '../../models/leave-type';
+import { LeaveType } from '../../models/schemas/leave-type';
 import { LeaveTypeService } from '../../services/leave-type.service';
 
 @Component({

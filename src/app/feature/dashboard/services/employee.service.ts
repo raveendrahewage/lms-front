@@ -8,11 +8,9 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Constant } from './../constant/constant';
-import {
-  NewSystemUser,
-  SystemUser,
-  SystemUserListItem,
-} from './../models/system-user';
+import { SystemUser } from '../models/schemas/system-user';
+import { SystemUserListItem } from '../models/system-user-list-item';
+import { NewSystemUser } from '../models/new-system-user';
 import { ApiResponse } from '../models/api-response';
 import { ResetPasswordFormData } from '../models/forms';
 import { AuthService } from '../auth/auth.service';

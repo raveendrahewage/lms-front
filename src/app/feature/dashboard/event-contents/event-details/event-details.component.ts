@@ -19,11 +19,12 @@ import { MatIcon } from '@angular/material/icon';
 import { ToastrService } from 'ngx-toastr';
 import { StatusValue } from '../../models/status-toggle';
 import { OptionToggleComponent } from '../../shared/option-toggle/option-toggle.component';
-import { Event } from '../../models/event';
+import { Event } from '../../models/schemas/event';
 import { EventStatus } from '../../constant/event-status';
 import { EventService } from '../../services/event.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { EventMode } from '../../constant/event-mode';
 
 @Component({
   selector: 'app-employee-details',
@@ -56,6 +57,10 @@ export class EventDetailsComponent implements OnInit {
     startDate: [new Date(''), [Validators.required]],
     endDate: [new Date(''), [Validators.required]],
     eventStatus: [EventStatus.ACTIVE, [Validators.required]],
+    eventMode: [
+      { value: EventMode.PRIVATE, disabled: !this.authService.isAdmin() },
+      [Validators.required],
+    ],
   });
   statuses: StatusValue[] = [
     {
