@@ -174,6 +174,7 @@ export class MyProfileComponent implements OnInit {
       phoneNumber: systemUser.phoneNumber || '',
       roleId: systemUser.roleId,
       status: systemUser.status,
+      supervisorId: systemUser.supervisorId,
     });
   }
 
@@ -192,8 +193,8 @@ export class MyProfileComponent implements OnInit {
 
   getAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
-      next: (data) => {
-        this.allEmployees = data.data;
+      next: (res) => {
+        this.allEmployees = res.data;
       },
       error: (error) => {
         console.log(error.error.message ?? error.message);

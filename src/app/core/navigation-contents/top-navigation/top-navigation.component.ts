@@ -33,7 +33,6 @@ export class TopNavigationComponent {
   ) {}
 
   toggleSidebar() {
-    console.log(this.authService.getCurrentSystemUser());
     this.sideBarService.toggle();
   }
 }

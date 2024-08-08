@@ -113,7 +113,6 @@ export class EventDetailsComponent implements OnInit {
       this.isEditable = isEditable;
       if (isEditable) {
         this.eventForm.enable();
-        console.log(this.authService.getCurrentSystemUserRole());
         if (!this.authService.isAdmin()) {
           this.eventForm.controls.eventMode.disable();
         }
