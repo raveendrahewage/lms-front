@@ -25,6 +25,7 @@ import { EventService } from '../../services/event.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { EventMode } from '../../constant/event-mode';
+import { SystemRole } from '../../constant/system-user-roles';
 
 @Component({
   selector: 'app-employee-details',
@@ -76,6 +77,20 @@ export class EventDetailsComponent implements OnInit {
       clickAction: () => this.updateStatus(EventStatus.CANCELED),
     },
   ];
+  modes: StatusValue[] = [
+    {
+      value: EventMode.PUBLIC,
+      label: 'Public',
+      color: 'cadetblue',
+      clickAction: () => this.updateMode(EventMode.PUBLIC),
+    },
+    {
+      value: EventMode.PRIVATE,
+      label: 'Private',
+      color: 'darkgray',
+      clickAction: () => this.updateMode(EventMode.PRIVATE),
+    },
+  ];
   isEditable: boolean = false;
 
   constructor(
@@ -94,15 +109,26 @@ export class EventDetailsComponent implements OnInit {
   }
 
   toggleMode(isEditable: boolean) {
-    this.isEditable = isEditable;
-    if (isEditable) this.eventForm.enable();
-    else {
-      this.patchEventForm(this.event);
-      this.eventForm.disable();
+    if (this.event.createdBy === this.authService.getCurrentSystemUserId()) {
+      this.isEditable = isEditable;
+      if (isEditable) {
+        this.eventForm.enable();
+        console.log(this.authService.getCurrentSystemUserRole());
+        if (!this.authService.isAdmin()) {
+          this.eventForm.controls.eventMode.disable();
+        }
+      } else {
+        this.patchEventForm(this.event);
+        this.eventForm.disable();
+      }
     }
   }
   updateStatus(eventStatus: EventStatus) {
     this.eventForm.controls.eventStatus.patchValue(eventStatus);
+  }
+
+  updateMode(eventMode: EventMode) {
+    this.eventForm.controls.eventMode.patchValue(eventMode);
   }
 
   patchEventForm(event: Event) {

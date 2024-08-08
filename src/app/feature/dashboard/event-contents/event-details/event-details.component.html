@@ -65,17 +65,26 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="w-full flex first-line: justify-end">
-      <app-option-toggle
-        [control]="eventForm.controls.eventStatus"
-        [options]="statuses"
-      ></app-option-toggle>
+    <div class="form-group flex flex-wrap mb-4">
+      <div class="w-full md:w-1/2 pr-2 mb-2 md:mb-0">
+        <app-option-toggle
+          [control]="eventForm.controls.eventMode"
+          [options]="modes"
+        ></app-option-toggle>
+      </div>
+      <div class="w-full md:w-1/2 mb-2 md:mb-0">
+        <app-option-toggle
+          [control]="eventForm.controls.eventStatus"
+          [options]="statuses"
+        ></app-option-toggle>
+      </div>
     </div>
     <button
       mat-raised-button
       color="primary"
       class="mt-3 w-full bg-blue-500 text-white py-2 rounded"
       type="submit"
+      [disabled]="!isEditable"
     >
       Save
     </button>

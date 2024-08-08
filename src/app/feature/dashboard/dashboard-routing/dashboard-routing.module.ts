@@ -68,7 +68,7 @@ export const DASHBOARD_ROUTES: Routes = [
       {
         path: 'events',
         component: EventMainComponent,
-        canActivateChild: [adminAuthGuard],
+        // canActivateChild: [adminAuthGuard],
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
           { path: 'details', component: EventListComponent },

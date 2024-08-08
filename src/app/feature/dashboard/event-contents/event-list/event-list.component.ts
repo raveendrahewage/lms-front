@@ -74,7 +74,7 @@ export class EventListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAllEvents();
+    this.getAllEventsSsr();
   }
 
   getRecordIndex(i: number): number {
@@ -84,22 +84,22 @@ export class EventListComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.page = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getAllEvents();
+    this.getAllEventsSsr();
   }
   onSortChange(event: Sort) {
     this.sortBy = capitalizeFirstLetter(event.active);
     this.sortMode =
       getEnumValueByName(SortMode, event.direction.toLocaleUpperCase()) ??
       SortMode.ASC;
-    this.getAllEvents();
+    this.getAllEventsSsr();
   }
 
   onSearchTermChange() {
     if (this.searchForm.controls.searchTerm.value.length === 0)
-      this.getAllEvents();
+      this.getAllEventsSsr();
   }
 
-  getAllEvents() {
+  getAllEventsSsr() {
     const dataTableConfiguration: DataTableConfiguration = {
       page: this.page,
       pageSize: this.pageSize,
