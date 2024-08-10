@@ -42,6 +42,7 @@ import { ConfimationModalComponent } from '../../shared/confimation-modal/confim
 import { ConfirmationDialogData } from '../../models/confimation-modal-data';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
+import { LeaveViewMode } from '../../constant/leave-view-mode';
 
 @Component({
   selector: 'app-leaverequest-manage',
@@ -140,10 +141,9 @@ export class LeaveDetailsComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe((params) => {
       this.getLeaveById(+params['id']);
+      this.getLeaveTypes(+params['mode']);
     });
     this.getAllEmployees();
-    this.getLeaveTypes();
-    this.setFormMode();
   }
 
   toggleMode(isEditable: boolean) {
@@ -271,6 +271,7 @@ export class LeaveDetailsComponent implements OnInit {
       next: (res) => {
         this.leave = res.data;
         this.patchLeaveFrom(this.leave);
+        this.setFormMode();
       },
       error: (error) => {
         console.log(error.error.message ?? error.message);
@@ -278,16 +279,33 @@ export class LeaveDetailsComponent implements OnInit {
       },
     });
   }
-  getLeaveTypes() {
-    this.leaveTypeService.getAllLeaveTypes().subscribe({
-      next: (res) => {
-        this.leaveTypes = res.data;
-      },
-      error: (error) => {
-        console.log(error.error.message ?? error.message);
-        this.toastr.error(error.error.message ?? error.message);
-      },
-    });
+  getLeaveTypes(mode: number) {
+    if (
+      mode === LeaveViewMode.SUPERVISOR_APPROVAL ||
+      mode === LeaveViewMode.ADNIN_VIEW
+    ) {
+      this.leaveTypeService.getAllLeaveTypes().subscribe({
+        next: (res) => {
+          this.leaveTypes = res.data;
+        },
+        error: (error) => {
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
+        },
+      });
+    } else if (mode === LeaveViewMode.SYSTEM_USER_UPDATE) {
+      this.leaveTypeService
+        .getLeaveTypesForEmployee(this.authService.getCurrentSystemUserId())
+        .subscribe({
+          next: (res) => {
+            this.leaveTypes = res.data;
+          },
+          error: (error) => {
+            console.log(error.error.message ?? error.message);
+            this.toastr.error(error.error.message ?? error.message);
+          },
+        });
+    }
   }
 
   getAllEmployees() {
@@ -326,6 +344,7 @@ export class LeaveDetailsComponent implements OnInit {
       .updateLeave(this.leaveForm.getRawValue() as Leave)
       .subscribe({
         next: (res) => {
+          this.leave = res.data;
           this.toastr.success(res.message);
           this.leaveForm.controls.dateWiseLeaves.clear();
           this.setDateWiseLeaveDataSource();

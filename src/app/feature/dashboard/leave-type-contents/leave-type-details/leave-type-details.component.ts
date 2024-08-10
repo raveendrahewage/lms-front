@@ -120,6 +120,7 @@ export class LeaveTypeDetailsComponent implements OnInit {
         this.leaveTypeUpdateForm.getRawValue() as LeaveType;
       this.leaveTypeService.updateLeaveType(updateProfileData).subscribe({
         next: (res) => {
+          this.leaveType = res.data;
           this.toastr.success(res.message);
         },
         error: (error) => {

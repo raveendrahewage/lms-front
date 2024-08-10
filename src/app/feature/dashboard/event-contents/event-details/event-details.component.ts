@@ -152,6 +152,7 @@ export class EventDetailsComponent implements OnInit {
       const eventFormData: Event = this.eventForm.getRawValue() as Event;
       this.eventService.updateEvent(eventFormData).subscribe({
         next: (res) => {
+          this.event = res.data;
           this.toastr.success(res.message);
         },
         error: (error) => {

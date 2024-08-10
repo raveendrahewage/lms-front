@@ -46,7 +46,7 @@ export const DASHBOARD_ROUTES: Routes = [
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
           { path: 'details', component: LeaveListComponent },
-          { path: 'details/:id', component: LeaveDetailsComponent },
+          { path: 'details/:mode/:id', component: LeaveDetailsComponent },
           { path: 'new', component: LeaveManageComponent },
           { path: 'new/:date', component: LeaveManageComponent },
         ],
@@ -68,7 +68,6 @@ export const DASHBOARD_ROUTES: Routes = [
       {
         path: 'events',
         component: EventMainComponent,
-        // canActivateChild: [adminAuthGuard],
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
           { path: 'details', component: EventListComponent },

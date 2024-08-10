@@ -24,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { CalendarEventTileComponent } from '../../../shared/calendar-event-tile/calendar-event-tile.component';
 import { CalendarDayCellComponent } from '../../../shared/calendar-day-cell/calendar-day-cell.component';
+import { LeaveViewMode } from '../../../constant/leave-view-mode';
 
 @Component({
   selector: 'app-dashboard-calendar',
@@ -58,24 +59,6 @@ export class DashboardCalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEvents();
-  }
-
-  eventClicked(currEvent: CalEvent): void {
-    const clickedEvent: CalendarEvent = currEvent.meta.event;
-    switch (clickedEvent.calendarEventType) {
-      case CalendarEventType.LEAVE:
-        this.router.navigate([
-          '/dashboard/leaves/details/' + clickedEvent.calendarEventId,
-        ]);
-        break;
-      case CalendarEventType.EVENT:
-        this.router.navigate([
-          '/dashboard/events/details/' + clickedEvent.calendarEventId,
-        ]);
-        break;
-      default:
-        break;
-    }
   }
 
   getEvents(): void {

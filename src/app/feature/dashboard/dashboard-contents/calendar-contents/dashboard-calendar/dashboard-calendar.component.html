@@ -18,17 +18,9 @@
 >
 </mwl-calendar-month-view>
 }@case (calendarView.Week){
-<mwl-calendar-week-view
-  [viewDate]="viewDate"
-  [events]="calendarEvents"
-  (eventClicked)="eventClicked($event.event)"
->
+<mwl-calendar-week-view [viewDate]="viewDate" [events]="calendarEvents">
 </mwl-calendar-week-view>
 }@case(calendarView.Day){
-<mwl-calendar-day-view
-  [viewDate]="viewDate"
-  [events]="calendarEvents"
-  (eventClicked)="eventClicked($event.event)"
->
+<mwl-calendar-day-view [viewDate]="viewDate" [events]="calendarEvents">
 </mwl-calendar-day-view>
 } }

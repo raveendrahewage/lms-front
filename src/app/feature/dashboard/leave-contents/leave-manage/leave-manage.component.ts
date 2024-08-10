@@ -161,15 +161,17 @@ export class LeaveManageComponent implements OnInit {
     });
   }
   getLeaveTypes() {
-    this.leaveTypeService.getAllLeaveTypes().subscribe({
-      next: (res) => {
-        this.leaveTypes = res.data;
-      },
-      error: (error) => {
-        console.log(error.error.message ?? error.message);
-        this.toastr.error(error.error.message ?? error.message);
-      },
-    });
+    this.leaveTypeService
+      .getLeaveTypesForEmployee(this.authService.getCurrentSystemUserId())
+      .subscribe({
+        next: (res) => {
+          this.leaveTypes = res.data;
+        },
+        error: (error) => {
+          console.log(error.error.message ?? error.message);
+          this.toastr.error(error.error.message ?? error.message);
+        },
+      });
   }
 
   getAllEmployees() {

@@ -307,6 +307,7 @@ export class EmployeeDetailsComponent implements OnInit {
         this.employeeUpdateForm.getRawValue() as SystemUser;
       this.employeeService.updateEmployee(updateProfileData).subscribe({
         next: (res) => {
+          this.systemUser = res.data;
           this.toastr.success(res.message);
         },
         error: (error) => {

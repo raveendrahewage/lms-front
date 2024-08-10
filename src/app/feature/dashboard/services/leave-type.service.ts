@@ -31,11 +31,9 @@ export class LeaveTypeService {
       )
       .pipe(catchError(this.errorHandler));
   }
-  getLeaveTypesForEmployee(
-    id: number
-  ): Observable<ApiResponse<LeaveAvailability[]>> {
+  getLeaveTypesForEmployee(id: number): Observable<ApiResponse<LeaveType[]>> {
     return this.http
-      .get<ApiResponse<LeaveAvailability[]>>(
+      .get<ApiResponse<LeaveType[]>>(
         `${Constant.API_ENDPOINT}/leave-type/get-leave-types-for-employee/${id}`
       )
       .pipe(catchError(this.errorHandler));

@@ -28,6 +28,7 @@ import { LeaveService } from '../../services/leave.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { LeaveStatus } from '../../constant/leave-status';
 import { LeaveStatusChipComponent } from '../../shared/leave-status-chip/leave-status-chip.component';
+import { LeaveViewMode } from '../../constant/leave-view-mode';
 
 @Component({
   selector: 'app-employee-list',
@@ -52,6 +53,7 @@ import { LeaveStatusChipComponent } from '../../shared/leave-status-chip/leave-s
 })
 export class LeaveListComponent implements OnInit {
   leaveFetchingMode: typeof LeaveFetchingMode = LeaveFetchingMode;
+  leaveViewMode: typeof LeaveViewMode = LeaveViewMode;
   leaveStatus: typeof LeaveStatus = LeaveStatus;
   allEmployeeLeaves: LeaveListItem[] = [];
   myLeaves: LeaveListItem[] = [];
