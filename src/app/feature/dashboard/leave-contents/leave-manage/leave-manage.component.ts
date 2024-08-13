@@ -67,6 +67,7 @@ export class LeaveManageComponent implements OnInit {
   conditionalColumns: string[] = ['leaveDayHalfOrQuarterType'];
   displayColumns = [...this.defaultColumns];
   leaveTypes: LeaveType[] = [];
+  leaveType: LeaveType = {} as LeaveType;
   allEmployees: SystemUser[] = [];
   selectedLeaveType: LeaveType = {} as LeaveType;
   leaveForm: FormGroup<LeaveForm> = this.fb.group({
@@ -172,6 +173,18 @@ export class LeaveManageComponent implements OnInit {
           this.toastr.error(error.error.message ?? error.message);
         },
       });
+  }
+
+  getLeaveTypeById(leaveTypeId: number) {
+    this.leaveTypeService.getLeaveTypeById(leaveTypeId).subscribe({
+      next: (res) => {
+        this.leaveType = res.data;
+      },
+      error: (error) => {
+        console.log(error.error.message ?? error.message);
+        this.toastr.error(error.error.message ?? error.message);
+      },
+    });
   }
 
   getAllEmployees() {

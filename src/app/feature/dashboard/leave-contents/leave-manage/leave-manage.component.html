@@ -19,7 +19,11 @@
   <div class="mb-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label class="text-black">Select Leave Type</mat-label>
-      <mat-select formControlName="leaveTypeId" class="text-black">
+      <mat-select
+        formControlName="leaveTypeId"
+        class="text-black"
+        (selectionChange)="getLeaveTypeById($event.value)"
+      >
         @for (item of leaveTypes; track $index) {
         <mat-option [value]="item.id">
           {{ item.name }}

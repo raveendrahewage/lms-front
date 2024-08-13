@@ -271,7 +271,7 @@ export class LeaveDetailsComponent implements OnInit {
       next: (res) => {
         this.leave = res.data;
         this.patchLeaveFrom(this.leave);
-        this.setFormMode();
+        this.toggleMode(false);
       },
       error: (error) => {
         console.log(error.error.message ?? error.message);
