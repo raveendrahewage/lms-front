@@ -1,0 +1,20 @@
+<div class="flex justify-between w-full gap-2">
+  <mat-chip-row class="flex-1 text-center bg-blue-200"
+    >Current Balance
+    <span class="p-1 px-2 bg-gray-300 rounded-full ml-2">{{
+      leaveCalculation.currentBalance
+    }}</span></mat-chip-row
+  >
+  <mat-chip-row class="flex-1 text-center bg-orange-200"
+    >Currently Booked
+    <span class="p-1 px-2 bg-gray-300 rounded-full ml-2">{{
+      leaveCalculation.currentlyBooked
+    }}</span></mat-chip-row
+  >
+  <mat-chip-row class="flex-1 text-center bg-red-300"
+    >Balance After Booked Leave
+    <span class="p-1 px-2 bg-gray-300 rounded-full ml-2">{{
+      leaveCalculation.balanceAfterBooked
+    }}</span>
+  </mat-chip-row>
+</div>

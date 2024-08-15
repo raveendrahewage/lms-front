@@ -4,8 +4,6 @@ import {
   Validators,
   ReactiveFormsModule,
   AbstractControl,
-  FormGroupDirective,
-  ValidationErrors,
 } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
@@ -43,6 +41,10 @@ import { ConfirmationDialogData } from '../../models/confimation-modal-data';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { LeaveViewMode } from '../../constant/leave-view-mode';
+import { LeaveAvailability } from '../../models/schemas/leave-availability';
+import { leaveCalculation } from '../../helper/leave-helper';
+import { LeaveCalculation } from '../../models/leave-calculation';
+import { LeaveCalculationBarComponent } from '../../shared/leave-calculation-bar/leave-calculation-bar.component';
 
 @Component({
   selector: 'app-leaverequest-manage',
@@ -60,6 +62,7 @@ import { LeaveViewMode } from '../../constant/leave-view-mode';
     MatButtonModule,
     OptionToggleComponent,
     ConfimationModalComponent,
+    LeaveCalculationBarComponent,
   ],
   templateUrl: './leave-details.component.html',
   styleUrls: ['./leave-details.component.css'],
@@ -80,8 +83,13 @@ export class LeaveDetailsComponent implements OnInit {
   leave: Leave = {} as Leave;
   leaveTypes: LeaveType[] = [];
   allEmployees: SystemUser[] = [];
-  selectedLeaveType: LeaveType = {} as LeaveType;
+  selectedLeaveType: LeaveType | null = null;
   sub: any;
+  leaveCalculation: LeaveCalculation = {
+    currentBalance: 0,
+    currentlyBooked: 0,
+    balanceAfterBooked: 0,
+  };
   leaveForm: FormGroup<LeaveForm> = this.fb.group({
     id: [0],
     employeeId: [
@@ -224,6 +232,16 @@ export class LeaveDetailsComponent implements OnInit {
         );
   }
 
+  onLeaveTypeChanged(leaveTypeId: number) {
+    this.selectedLeaveType = this.leaveTypes.find(
+      (x) => x.id === leaveTypeId
+    ) as LeaveType;
+    this.leaveCalculation = leaveCalculation(
+      this.leaveForm.getRawValue() as Leave,
+      this.selectedLeaveType
+    );
+  }
+
   createDateWiseLeave(
     dateWiseLeave: DateWiseLeave
   ): FormGroup<DateWiseLeaveForm> {
@@ -250,6 +268,7 @@ export class LeaveDetailsComponent implements OnInit {
         this.createDateWiseLeave(leave.dateWiseLeaves[i])
       );
     }
+    this.onLeaveTypeChanged(this.leave.leaveTypeId);
     this.setDateWiseLeaveDataSource();
   }
 

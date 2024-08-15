@@ -35,6 +35,9 @@ import { AuthService } from '../../auth/auth.service';
 import { Leave } from '../../models/schemas/leave';
 import { LeaveStatus } from '../../constant/leave-status';
 import { ActivatedRoute } from '@angular/router';
+import { LeaveCalculation } from '../../models/leave-calculation';
+import { LeaveCalculationBarComponent } from '../../shared/leave-calculation-bar/leave-calculation-bar.component';
+import { leaveCalculation } from '../../helper/leave-helper';
 
 @Component({
   selector: 'app-leaverequest-manage',
@@ -49,6 +52,7 @@ import { ActivatedRoute } from '@angular/router';
     MatDatepickerModule,
     MatSelectModule,
     MatTableModule,
+    LeaveCalculationBarComponent,
   ],
   templateUrl: './leave-manage.component.html',
   styleUrls: ['./leave-manage.component.css'],
@@ -69,7 +73,12 @@ export class LeaveManageComponent implements OnInit {
   leaveTypes: LeaveType[] = [];
   leaveType: LeaveType = {} as LeaveType;
   allEmployees: SystemUser[] = [];
-  selectedLeaveType: LeaveType = {} as LeaveType;
+  selectedLeaveType: LeaveType | null = null;
+  leaveCalculation: LeaveCalculation = {
+    currentBalance: 0,
+    currentlyBooked: 0,
+    balanceAfterBooked: 0,
+  };
   leaveForm: FormGroup<LeaveForm> = this.fb.group({
     id: [0],
     employeeId: [
@@ -79,7 +88,7 @@ export class LeaveManageComponent implements OnInit {
     leaveTypeId: [null as number | null, [Validators.required]],
     fromDate: [new Date(''), [Validators.required]],
     toDate: [new Date(''), [Validators.required]],
-    reason: [null as string | null],
+    reason: [null as string | null, [Validators.required]],
     leaveStatus: [LeaveStatus.PENDING],
     deniedReason: [null as string | null],
     reviewedBy: [null as number | null],
@@ -108,6 +117,9 @@ export class LeaveManageComponent implements OnInit {
   removeDateWiseLeave(index: number) {
     this.leaveForm.controls.dateWiseLeaves.removeAt(index);
     this.setDataSource();
+    this.onLeaveTypeChanged(
+      this.leaveForm.controls.leaveTypeId.value as number
+    );
   }
 
   setDataSource() {
@@ -131,6 +143,19 @@ export class LeaveManageComponent implements OnInit {
         .controls.leaveQuarterDayType.setValue(
           LeaveQuarterDayType.FIRST_QUARTER
         );
+    this.onLeaveTypeChanged(
+      this.leaveForm.controls.leaveTypeId.value as number
+    );
+  }
+
+  onLeaveTypeChanged(leaveTypeId: number) {
+    this.selectedLeaveType = this.leaveTypes.find(
+      (x) => x.id === leaveTypeId
+    ) as LeaveType;
+    this.leaveCalculation = leaveCalculation(
+      this.leaveForm.getRawValue() as Leave,
+      this.selectedLeaveType
+    );
   }
 
   onDateChange() {
@@ -149,6 +174,9 @@ export class LeaveManageComponent implements OnInit {
         currentDate.setDate(currentDate.getDate() + 1);
       }
       this.setDataSource();
+      this.onLeaveTypeChanged(
+        this.leaveForm.controls.leaveTypeId.value as number
+      );
     }
   }
   createDateWiseLeave(date: Date): FormGroup<DateWiseLeaveForm> {
@@ -175,18 +203,6 @@ export class LeaveManageComponent implements OnInit {
       });
   }
 
-  getLeaveTypeById(leaveTypeId: number) {
-    this.leaveTypeService.getLeaveTypeById(leaveTypeId).subscribe({
-      next: (res) => {
-        this.leaveType = res.data;
-      },
-      error: (error) => {
-        console.log(error.error.message ?? error.message);
-        this.toastr.error(error.error.message ?? error.message);
-      },
-    });
-  }
-
   getAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
       next: (res) => {
@@ -210,6 +226,7 @@ export class LeaveManageComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.toastr.success(res.message);
+            this.selectedLeaveType = null;
             this.leaveForm.controls.leaveStatus.setValue(LeaveStatus.PENDING);
             this.leaveForm.controls.dateWiseLeaves.clear();
             formDirective.resetForm();

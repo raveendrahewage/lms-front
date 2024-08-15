@@ -9,6 +9,6 @@ export interface LeaveAvailability extends DataRecord {
   leaveCount: number;
   bookedCount: number;
   balanceCount: number;
-  leaveType?: LeaveType;
-  systemUser?: SystemUser;
+  leaveType: LeaveType;
+  systemUser: SystemUser;
 }

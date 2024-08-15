@@ -12,10 +12,10 @@ export interface Leave extends DataRecord {
   toDate: Date;
   reason: string;
   leaveStatus: LeaveStatus;
-  deniedReason?: string | null;
-  reviewedBy?: number | null;
+  deniedReason: string | null;
+  reviewedBy: number | null;
   leaveType: LeaveType;
-  supervisor?: SystemUser | null;
+  supervisor: SystemUser | null;
   employee: SystemUser;
   dateWiseLeaves: DateWiseLeave[];
 }

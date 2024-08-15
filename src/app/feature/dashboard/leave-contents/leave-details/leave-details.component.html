@@ -15,7 +15,11 @@
     <div class="mb-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label class="text-black">Select Leave Type</mat-label>
-        <mat-select formControlName="leaveTypeId" class="text-black">
+        <mat-select
+          formControlName="leaveTypeId"
+          class="text-black"
+          (selectionChange)="onLeaveTypeChanged($event.value)"
+        >
           @for (item of leaveTypes; track $index) {
           <mat-option [value]="item.id">
             {{ item.name }}
@@ -23,6 +27,11 @@
           }
         </mat-select>
       </mat-form-field>
+      @if(selectedLeaveType){
+      <app-leave-calculation-bar
+        [leaveCalculation]="leaveCalculation"
+      ></app-leave-calculation-bar>
+      }
     </div>
     <div class="mb-4">
       <mat-form-field appearance="outline" class="w-full">
@@ -163,9 +172,9 @@
       </table>
     </div>
     <div class="mb-4 float-end">
-      @if(authService.getCurrentSystemUserId() ===
-      leave.employee?.supervisorId){ @switch
-      (leaveForm.controls.leaveStatus.value) { @case (leaveStatus.CANCELED) {
+      @if(authService.getCurrentSystemUserId() === leave.employee.supervisorId){
+      @switch (leaveForm.controls.leaveStatus.value) { @case
+      (leaveStatus.CANCELED) {
       <app-option-toggle
         [control]="leaveForm.controls.leaveStatus"
         [options]="[statuses[3]]"

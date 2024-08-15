@@ -9,10 +9,10 @@ export interface SystemUser extends DataRecord {
   lastName: string;
   email: string;
   fullName: string;
-  phoneNumber?: string | null;
+  phoneNumber: string | null;
   roleId: number;
-  supervisorId?: number | null;
-  supervisor?: SystemUser | null;
+  supervisorId: number | null;
+  supervisor: SystemUser | null;
   employeesUnderSupervision?: SystemUser[] | null;
   role: SystemRole;
   leaves: Leave[];

@@ -10,7 +10,7 @@ export interface DateWiseLeave extends DataRecord {
   leaveId: number;
   date: Date;
   leaveDayType: LeaveDayType;
-  leaveHalfDayType?: LeaveHalfDayType | null;
-  leaveQuarterDayType?: LeaveQuarterDayType | null;
+  leaveHalfDayType: LeaveHalfDayType | null;
+  leaveQuarterDayType: LeaveQuarterDayType | null;
   leave: Leave;
 }
