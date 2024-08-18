@@ -43,12 +43,7 @@ import { LeaveTypeService } from '../../services/leave-type.service';
 })
 export class LeaveTypeManageComponent {
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
-  newLeaveTypeForm: FormGroup<LeaveTypeForm> = this.fb.group({
-    id: [0, [Validators.required]],
-    name: ['', [Validators.required]],
-    defaultLeaveCount: [0, [Validators.required]],
-    status: [DataRecordStatus.ACTIVE, [Validators.required]],
-  });
+  newLeaveTypeForm: FormGroup<LeaveTypeForm> = this.initializeForm();
   statuses: StatusValue[] = [
     {
       value: DataRecordStatus.ACTIVE,
@@ -75,6 +70,15 @@ export class LeaveTypeManageComponent {
     this.newLeaveTypeForm.controls.status.patchValue(dataRecordStatus);
   }
 
+  initializeForm(): FormGroup<LeaveTypeForm> {
+    return this.fb.group({
+      id: [0, [Validators.required]],
+      name: ['', [Validators.required]],
+      defaultLeaveCount: [0, [Validators.required]],
+      status: [DataRecordStatus.ACTIVE, [Validators.required]],
+    });
+  }
+
   onSubmit(formDirective: FormGroupDirective) {
     if (this.newLeaveTypeForm.valid) {
       const updateProfileData: LeaveType =
@@ -82,9 +86,7 @@ export class LeaveTypeManageComponent {
       this.leaveTypeService.createLeaveType(updateProfileData).subscribe({
         next: (res) => {
           formDirective.resetForm();
-          this.newLeaveTypeForm.controls.status.setValue(
-            DataRecordStatus.ACTIVE
-          );
+          this.initializeForm();
           this.toastr.success(res.message);
         },
         error: (error) => {

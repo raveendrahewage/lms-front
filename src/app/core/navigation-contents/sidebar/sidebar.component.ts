@@ -14,12 +14,19 @@ import { sidebarRoutes } from '../../../feature/dashboard/constant/routes';
 })
 export class SidebarComponent implements OnInit {
   isOpen = false;
-  routes: RouteLink[] = sidebarRoutes;
+  routes: RouteLink[] = this.getSidebarRoutes(this.authService.isAdmin());
 
-  constructor(private sidebarService: SidebarService) {}
+  constructor(
+    private sidebarService: SidebarService,
+    private authService: AuthService
+  ) {}
   ngOnInit() {
     this.sidebarService.change.subscribe((isOpen) => {
       this.isOpen = isOpen;
     });
+  }
+
+  getSidebarRoutes(isAdmin: boolean): RouteLink[] {
+    return sidebarRoutes.filter((route) => isAdmin || !route.isAdminOnly);
   }
 }

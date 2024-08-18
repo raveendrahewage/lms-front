@@ -76,31 +76,7 @@ export class EmployeeManageComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
   employeesForSupervisionList: SystemUser[] = [];
   employeesForUnderSupervisonList: SystemUser[] = [];
-  newEmployeeForm: FormGroup<NewEmployeeForm> = this.fb.group({
-    id: [0, [Validators.required]],
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    password: [
-      '',
-      [
-        Validators.required,
-        CustomValidators.requiredLength(8),
-        CustomValidators.requireDigit(),
-        CustomValidators.requireNonAlphanumeric(),
-        CustomValidators.requireUppercase(),
-        CustomValidators.requireLowercase(),
-      ],
-    ],
-    phoneNumber: ['', [CustomValidators.phoneNumber]],
-    email: ['', [Validators.required, Validators.email]],
-    roleId: [SystemRoleId.USER, [Validators.required]],
-    status: [DataRecordStatus.ACTIVE, [Validators.required]],
-    supervisorId: [null as number | null],
-    employeesUnderSupervision: [[] as SystemUser[]],
-    leaveAvailabilities: this.fb.array(
-      [] as FormGroup<LeaveAvailabilityForm>[]
-    ),
-  });
+  newEmployeeForm: FormGroup<NewEmployeeForm> = this.initializeForm();
   statuses: StatusValue[] = [
     {
       value: DataRecordStatus.ACTIVE,
@@ -137,6 +113,34 @@ export class EmployeeManageComponent implements OnInit {
     private leaveTypeService: LeaveTypeService,
     private toastr: ToastrService
   ) {}
+
+  initializeForm(): FormGroup<NewEmployeeForm> {
+    return this.fb.group({
+      id: [0, [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      password: [
+        '',
+        [
+          Validators.required,
+          CustomValidators.requiredLength(8),
+          CustomValidators.requireDigit(),
+          CustomValidators.requireNonAlphanumeric(),
+          CustomValidators.requireUppercase(),
+          CustomValidators.requireLowercase(),
+        ],
+      ],
+      phoneNumber: ['', [CustomValidators.phoneNumber]],
+      email: ['', [Validators.required, Validators.email]],
+      roleId: [SystemRoleId.USER, [Validators.required]],
+      status: [DataRecordStatus.ACTIVE, [Validators.required]],
+      supervisorId: [null as number | null],
+      employeesUnderSupervision: [[] as SystemUser[]],
+      leaveAvailabilities: this.fb.array(
+        [] as FormGroup<LeaveAvailabilityForm>[]
+      ),
+    });
+  }
 
   ngOnInit() {
     this.getAllEmployees();
@@ -235,10 +239,7 @@ export class EmployeeManageComponent implements OnInit {
       this.employeeService.createEmployee(newEmployeeData).subscribe({
         next: (res) => {
           formDirective.resetForm();
-          this.newEmployeeForm.controls.roleId.setValue(SystemRoleId.USER);
-          this.newEmployeeForm.controls.status.setValue(
-            DataRecordStatus.ACTIVE
-          );
+          this.initializeForm();
           this.toastr.success(res.message);
         },
         error: (error) => {

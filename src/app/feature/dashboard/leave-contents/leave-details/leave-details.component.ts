@@ -10,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 import { LeaveTypeService } from '../../services/leave-type.service';
 import { LeaveType } from '../../models/schemas/leave-type';
 import { LeaveService } from '../../services/leave.service';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  DateFilterFn,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -41,7 +45,6 @@ import { ConfirmationDialogData } from '../../models/confimation-modal-data';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { LeaveViewMode } from '../../constant/leave-view-mode';
-import { LeaveAvailability } from '../../models/schemas/leave-availability';
 import { leaveCalculation } from '../../helper/leave-helper';
 import { LeaveCalculation } from '../../models/leave-calculation';
 import { LeaveCalculationBarComponent } from '../../shared/leave-calculation-bar/leave-calculation-bar.component';
@@ -57,6 +60,7 @@ import { LeaveCalculationBarComponent } from '../../shared/leave-calculation-bar
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatSelectModule,
     MatTableModule,
     MatButtonModule,
@@ -208,6 +212,43 @@ export class LeaveDetailsComponent implements OnInit {
       this.leaveForm.controls.dateWiseLeaves.controls
     );
   }
+
+  setDataSource() {
+    this.dateWiseLeaveDataSourse.next(
+      this.leaveForm.controls.dateWiseLeaves.controls
+    );
+  }
+
+  weekendsDatesFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 0 && day !== 6;
+  };
+
+  onDateChange() {
+    if (
+      this.leaveForm.controls.fromDate.value &&
+      this.leaveForm.controls.toDate.value &&
+      this.leaveForm.controls.fromDate.value <=
+        this.leaveForm.controls.toDate.value
+    ) {
+      this.leaveForm.controls.dateWiseLeaves.clear();
+      const currentDate = new Date(this.leaveForm.controls.fromDate.value);
+      while (currentDate <= this.leaveForm.controls.toDate.value) {
+        this.leaveForm.controls.dateWiseLeaves.push(
+          this.createDateWiseLeave({
+            date: new Date(currentDate),
+            leaveDayType: LeaveDayType.FULL_DAY,
+          } as DateWiseLeave)
+        );
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      this.setDataSource();
+      this.onLeaveTypeChanged(
+        this.leaveForm.controls.leaveTypeId.value as number
+      );
+    }
+  }
+
   getDisplayColumns() {
     return this.leaveForm.controls.dateWiseLeaves.controls.some(
       (c) => c.controls.leaveDayType.value !== LeaveDayType.FULL_DAY
@@ -230,6 +271,9 @@ export class LeaveDetailsComponent implements OnInit {
         .controls.leaveQuarterDayType.setValue(
           LeaveQuarterDayType.FIRST_QUARTER
         );
+    this.onLeaveTypeChanged(
+      this.leaveForm.controls.leaveTypeId.value as number
+    );
   }
 
   onLeaveTypeChanged(leaveTypeId: number) {
@@ -246,8 +290,8 @@ export class LeaveDetailsComponent implements OnInit {
     dateWiseLeave: DateWiseLeave
   ): FormGroup<DateWiseLeaveForm> {
     return this.fb.group({
-      id: [dateWiseLeave.id],
-      leaveId: [dateWiseLeave.leaveId],
+      id: [dateWiseLeave.id ?? 0],
+      leaveId: [dateWiseLeave.leaveId ?? this.leave.id],
       date: [
         { value: dateWiseLeave.date, disabled: true },
         [Validators.required],
@@ -367,6 +411,8 @@ export class LeaveDetailsComponent implements OnInit {
           this.toastr.success(res.message);
           this.leaveForm.controls.dateWiseLeaves.clear();
           this.setDateWiseLeaveDataSource();
+          this.patchLeaveFrom(this.leave);
+          this.toggleMode(false);
         },
         error: (error) => {
           this.toastr.error(error.error.message ?? error.message);

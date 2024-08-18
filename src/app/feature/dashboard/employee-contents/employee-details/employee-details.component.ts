@@ -247,7 +247,7 @@ export class EmployeeDetailsComponent implements OnInit {
         [Validators.required, Validators.min(1)],
       ],
       bookedCount: [leaveAvailability.bookedCount],
-      balanceCount: [leaveAvailability.balanceCount],
+      balanceCount: [leaveAvailability.leaveCount],
     });
   }
 

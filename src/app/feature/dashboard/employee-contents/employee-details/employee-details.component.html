@@ -152,6 +152,9 @@
                 }
               </mat-expansion-panel>
             </div>
+            @if(authService.isAdmin() ||
+            authService.getCurrentSystemUserId()===systemUser.id){
+
             <div class="w-full mb-6">
               <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -168,7 +171,7 @@
                     "
                     [value]="leaveAvailabilities"
                     [compareWith]="leaveTypeCompairerForLeaveAvailabilities"
-                    [disabled]="!isEditable"
+                    [disabled]="!isEditable || !authService.isAdmin()"
                   >
                     @for (leaveType of leaveTypes; track $index) {
                     <mat-option [value]="leaveType">
@@ -233,6 +236,7 @@
                 </table>
               </mat-expansion-panel>
             </div>
+            }
             <button
               mat-raised-button
               color="primary"

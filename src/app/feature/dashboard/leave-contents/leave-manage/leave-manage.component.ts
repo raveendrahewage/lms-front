@@ -79,21 +79,7 @@ export class LeaveManageComponent implements OnInit {
     currentlyBooked: 0,
     balanceAfterBooked: 0,
   };
-  leaveForm: FormGroup<LeaveForm> = this.fb.group({
-    id: [0],
-    employeeId: [
-      this.authService.getCurrentSystemUserId(),
-      [Validators.required],
-    ],
-    leaveTypeId: [null as number | null, [Validators.required]],
-    fromDate: [new Date(''), [Validators.required]],
-    toDate: [new Date(''), [Validators.required]],
-    reason: [null as string | null, [Validators.required]],
-    leaveStatus: [LeaveStatus.PENDING],
-    deniedReason: [null as string | null],
-    reviewedBy: [null as number | null],
-    dateWiseLeaves: this.fb.array([] as FormGroup<DateWiseLeaveForm>[]),
-  });
+  leaveForm: FormGroup<LeaveForm> = this.initializeForm();
 
   constructor(
     private fb: FormBuilder,
@@ -104,6 +90,24 @@ export class LeaveManageComponent implements OnInit {
     private leaveTypeService: LeaveTypeService,
     private toastr: ToastrService
   ) {}
+
+  initializeForm(): FormGroup<LeaveForm> {
+    return this.fb.group({
+      id: [0],
+      employeeId: [
+        this.authService.getCurrentSystemUserId(),
+        [Validators.required],
+      ],
+      leaveTypeId: [null as number | null, [Validators.required]],
+      fromDate: [new Date(''), [Validators.required]],
+      toDate: [new Date(''), [Validators.required]],
+      reason: [null as string | null, [Validators.required]],
+      leaveStatus: [LeaveStatus.PENDING],
+      deniedReason: [null as string | null],
+      reviewedBy: [null as number | null],
+      dateWiseLeaves: this.fb.array([] as FormGroup<DateWiseLeaveForm>[]),
+    });
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe((params) => {
@@ -231,6 +235,7 @@ export class LeaveManageComponent implements OnInit {
             this.leaveForm.controls.dateWiseLeaves.clear();
             formDirective.resetForm();
             this.setDataSource();
+            this.initializeForm();
           },
           error: (error) => {
             this.toastr.error(error.error.message ?? error.message);

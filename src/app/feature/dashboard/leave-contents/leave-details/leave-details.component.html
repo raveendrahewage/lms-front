@@ -57,6 +57,8 @@
             formControlName="fromDate"
             placeholder="Date From"
             class="text-black"
+            (dateChange)="onDateChange()"
+            [matDatepickerFilter]="weekendsDatesFilter"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -75,6 +77,8 @@
             formControlName="toDate"
             placeholder="Date To"
             class="text-black"
+            (dateChange)="onDateChange()"
+            [matDatepickerFilter]="weekendsDatesFilter"
           />
           <mat-datepicker-toggle
             matSuffix

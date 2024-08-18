@@ -50,18 +50,7 @@ import { EventMode } from '../../constant/event-mode';
 export class EventManageComponent implements OnInit {
   sub: any;
   dataRecordStatus: typeof DataRecordStatus = DataRecordStatus;
-  eventForm: FormGroup<EventForm> = this.fb.group({
-    id: [0, [Validators.required]],
-    title: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    startDate: [new Date(''), [Validators.required]],
-    endDate: [new Date(''), [Validators.required]],
-    eventStatus: [EventStatus.ACTIVE, [Validators.required]],
-    eventMode: [
-      { value: EventMode.PRIVATE, disabled: !this.authService.isAdmin() },
-      [Validators.required],
-    ],
-  });
+  eventForm: FormGroup<EventForm> = this.initializeForm();
   statuses: StatusValue[] = [
     {
       value: EventStatus.ACTIVE,
@@ -99,6 +88,21 @@ export class EventManageComponent implements OnInit {
     private toastr: ToastrService
   ) {}
 
+  initializeForm(): FormGroup<EventForm> {
+    return this.fb.group({
+      id: [0, [Validators.required]],
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      startDate: [new Date(''), [Validators.required]],
+      endDate: [new Date(''), [Validators.required]],
+      eventStatus: [EventStatus.ACTIVE, [Validators.required]],
+      eventMode: [
+        { value: EventMode.PRIVATE, disabled: !this.authService.isAdmin() },
+        [Validators.required],
+      ],
+    });
+  }
+
   ngOnInit(): void {
     this.sub = this.route.params.subscribe((params) => {
       this.eventForm.controls.startDate.setValue(params['date']);
@@ -119,6 +123,7 @@ export class EventManageComponent implements OnInit {
       this.eventService.createEvent(eventFormData).subscribe({
         next: (res) => {
           formDirective.resetForm();
+          this.initializeForm();
           this.toastr.success(res.message);
         },
         error: (error) => {
