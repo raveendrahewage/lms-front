@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://employeeleave.herokuapp.com/api',
+  apiUrl: 'https://lms-api-fucgawb8d3bke8bz.westus2-01.azurewebsites.net/api',
 };

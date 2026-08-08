@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:44331/api',
+  apiUrl: 'https://lms-api-fucgawb8d3bke8bz.westus2-01.azurewebsites.net/api',
   holidayApiUrl: 'https://holidayapi.com/v1/holidays',
 };
 
