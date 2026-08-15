@@ -1,33 +1,24 @@
 <nav class="navbar fixed-top custom-nav px-2">
   <div>
-    <button
-      type="button"
-      class="text-white text-xl my-2 ml-2"
-      (click)="toggleSidebar()"
-    >
+    <button type="button" class="text-white text-xl my-2 ml-2" (click)="toggleSidebar()">
       <mat-icon>menu</mat-icon>
     </button>
-    <a class="text-white text-xl" routerLink="/dashboard"
-      >&nbsp; Leave Management System</a
-    >
+    <a class="text-white text-xl" routerLink="/dashboard">&nbsp; Leave Management System</a>
   </div>
   <div>
+    <app-notification-bell></app-notification-bell>
     <button mat-flat-button [matMenuTriggerFor]="menu">
       <mat-icon>account_circle</mat-icon>&nbsp;{{
-        authService.getCurrentSystemUser()?.fullName
+      authService.getCurrentSystemUser()?.fullName
       }}
     </button>
     <mat-menu #menu="matMenu" class="text-center">
       <mat-list>
         <mat-list-item>
-          <a routerLink="/dashboard/profile" routerLinkActive="active"
-            >Profile</a
-          >
+          <a routerLink="/dashboard/profile" routerLinkActive="active">Profile</a>
         </mat-list-item>
         <mat-list-item>
-          <span class="btn btn-sm btn-danger" (click)="authService.logout()"
-            >Logout</span
-          >
+          <span class="btn btn-sm btn-danger" (click)="authService.logout()">Logout</span>
         </mat-list-item>
       </mat-list>
     </mat-menu>

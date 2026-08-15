@@ -64,7 +64,7 @@ export class LeaveTypeManageComponent {
     public authService: AuthService,
     private leaveTypeService: LeaveTypeService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   updateStatus(dataRecordStatus: DataRecordStatus) {
     this.newLeaveTypeForm.controls.status.patchValue(dataRecordStatus);

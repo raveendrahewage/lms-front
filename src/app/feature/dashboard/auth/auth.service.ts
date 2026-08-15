@@ -9,6 +9,7 @@ import { AuthResult } from '../models/api-response';
 import { ApiResponse } from '../models/api-response';
 import { SystemUser } from '../models/schemas/system-user';
 import { SystemRole } from '../constant/system-user-roles';
+import { NotificationService } from '../services/notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +22,9 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cookieService: CookieService
-  ) {}
+    private cookieService: CookieService,
+    private notificationService: NotificationService,
+  ) { }
 
   signIn(formData: SignInFormData) {
     this.cookieService.delete('token');
@@ -65,6 +67,7 @@ export class AuthService {
   }
 
   logout() {
+    this.notificationService.stopConnection();
     this.cookieService.deleteAll('/');
     this.systemUserBs.next(null);
     this.router.navigate(['/']);

@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav'; // Import for potential sidenav toggle
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { NotificationBellComponent } from './notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-top-navigation',
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     MatSidenavModule,
     MatListModule,
     RouterModule,
+    NotificationBellComponent,
   ],
   templateUrl: './top-navigation.component.html',
   styleUrls: ['./top-navigation.component.css'],
@@ -30,7 +32,7 @@ export class TopNavigationComponent {
   constructor(
     private sideBarService: SidebarService,
     public authService: AuthService
-  ) {}
+  ) { }
 
   toggleSidebar() {
     this.sideBarService.toggle();
