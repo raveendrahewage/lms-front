@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000/api',
+  apiUrl: 'https://lms-api-fucgawb8d3bke8bz.westus2-01.azurewebsites.net/api',
   holidayApiUrl: 'https://holidayapi.com/v1/holidays',
-  hubUrl: 'http://localhost:5000/hubs/leave-notifications'
+  hubUrl: 'https://lms-api-fucgawb8d3bke8bz.westus2-01.azurewebsites.net/hubs/notifications',
+  functionAppBaseUrl: "https://lms-app-dev-fa-fva8gebccpgreqgx.westus2-01.azurewebsites.net",
 };
 
 /*

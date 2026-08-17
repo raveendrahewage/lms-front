@@ -26,4 +26,9 @@ export const sidebarRoutes: RouteLink[] = [
     path: '/dashboard/events',
     isAdminOnly: false,
   },
+  {
+    text: 'File Upload',
+    path: '/dashboard/file-upload',
+    isAdminOnly: false,
+  },
 ];

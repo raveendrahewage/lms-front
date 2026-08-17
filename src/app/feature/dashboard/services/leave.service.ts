@@ -19,7 +19,7 @@ import { LeaveReportItem } from '../models/leave-report-item';
   providedIn: 'root',
 })
 export class LeaveService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   errorHandler(error: HttpErrorResponse) {
     console.log('Leave api error ', error);
@@ -36,6 +36,7 @@ export class LeaveService {
       )
       .pipe(catchError(this.errorHandler));
   }
+
   getLeavesByEmployeeIdSsr(
     id: number,
     leaveFetchingMode: LeaveFetchingMode,

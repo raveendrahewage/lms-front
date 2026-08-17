@@ -10,6 +10,13 @@ import { LeaveStatus } from '../constant/leave-status';
 import { EventStatus } from '../constant/event-status';
 import { SystemUser } from './schemas/system-user';
 import { EventMode } from '../constant/event-mode';
+import { FileCategory } from '../constant/file-category';
+
+export interface FileUploadForm {
+  file: FormControl<File | null>;
+  category: FormControl<FileCategory | null>;
+  description: FormControl<string | null>;
+}
 
 export interface SearchForm {
   searchTerm: FormControl<string>;

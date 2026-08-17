@@ -1,0 +1,7 @@
+export enum FileCategory {
+    GENERAL_DOCUMENT = 1,
+    MEDICAL_DOCUMENT = 2,
+    LEAVE_EVIDENCE = 3,
+    IDENTITY_PROOF = 4,
+    EXPENSE_RECEIPT = 5
+}

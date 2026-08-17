@@ -19,6 +19,8 @@ import { EventListComponent } from '../event-contents/event-list/event-list.comp
 import { EventManageComponent } from '../event-contents/event-manage/event-manage.component';
 import { EventDetailsComponent } from '../event-contents/event-details/event-details.component';
 import { DashboardMainComponent } from '../dashboard-main/dashboard-main.component';
+import { FileUploadMainComponent } from '../file-upload-contents/file-upload-main/file-upload-main.component';
+import { FileUploadPageComponent } from '../file-upload-contents/file-upload-page/file-upload-page.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -80,6 +82,13 @@ export const DASHBOARD_ROUTES: Routes = [
             path: 'new/:date',
             component: EventManageComponent,
           },
+        ],
+      },
+      {
+        path: 'file-upload',
+        component: FileUploadMainComponent,
+        children: [
+          { path: '', component: FileUploadPageComponent },
         ],
       },
       { path: 'profile', component: MyProfileComponent },
