@@ -1,97 +1,185 @@
-import { MyProfileComponent } from './../profile-contents/my-profile/my-profile.component';
-import { Routes, RouterModule, CanActivate } from '@angular/router';
-import { MainLayoutComponent } from '../main-layout/main-layout.component';
-import { EmployeeMainComponent } from '../employee-contents/employee-main/employee-main.component';
-import { EmployeeDetailsComponent } from '../employee-contents/employee-details/employee-details.component';
-import { EmployeeListComponent } from '../employee-contents/employee-list/employee-list.component';
-import { EmployeeManageComponent } from '../employee-contents/employee-manage/employee-manage.component';
+import { Routes } from '@angular/router';
 import { adminAuthGuard } from '../auth/adminAuth.guard';
-import { LeaveMainComponent } from '../leave-contents/leave-main/leave-main.component';
-import { LeaveManageComponent } from '../leave-contents/leave-manage/leave-manage.component';
-import { LeaveListComponent } from '../leave-contents/leave-list/leave-list.component';
-import { LeaveDetailsComponent } from '../leave-contents/leave-details/leave-details.component';
-import { LeaveTypeMainComponent } from '../leave-type-contents/leave-type-main/leave-type-main.component';
-import { LeaveTypeListComponent } from '../leave-type-contents/leave-type-list/leave-type-list.component';
-import { LeaveTypeDetailsComponent } from '../leave-type-contents/leave-type-details/leave-type-details.component';
-import { LeaveTypeManageComponent } from '../leave-type-contents/leave-type-manage/leave-type-manage.component';
-import { EventMainComponent } from '../event-contents/event-main/event-main.component';
-import { EventListComponent } from '../event-contents/event-list/event-list.component';
-import { EventManageComponent } from '../event-contents/event-manage/event-manage.component';
-import { EventDetailsComponent } from '../event-contents/event-details/event-details.component';
-import { DashboardMainComponent } from '../dashboard-main/dashboard-main.component';
-import { FileUploadMainComponent } from '../file-upload-contents/file-upload-main/file-upload-main.component';
-import { FileUploadPageComponent } from '../file-upload-contents/file-upload-page/file-upload-page.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
     path: '',
-    component: MainLayoutComponent,
+    loadComponent: () =>
+      import('../main-layout/main-layout.component').then(
+        (m) => m.MainLayoutComponent
+      ),
     children: [
-      { path: '', component: DashboardMainComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('../dashboard-main/dashboard-main.component').then(
+            (m) => m.DashboardMainComponent
+          ),
+      },
       {
         path: 'employees',
-        component: EmployeeMainComponent,
+        loadComponent: () =>
+          import(
+            '../employee-contents/employee-main/employee-main.component'
+          ).then((m) => m.EmployeeMainComponent),
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
-          { path: 'details', component: EmployeeListComponent },
-          { path: 'details/:id', component: EmployeeDetailsComponent },
+          {
+            path: 'details',
+            loadComponent: () =>
+              import(
+                '../employee-contents/employee-list/employee-list.component'
+              ).then((m) => m.EmployeeListComponent),
+          },
+          {
+            path: 'details/:id',
+            loadComponent: () =>
+              import(
+                '../employee-contents/employee-details/employee-details.component'
+              ).then((m) => m.EmployeeDetailsComponent),
+          },
           {
             path: 'new',
-            component: EmployeeManageComponent,
+            loadComponent: () =>
+              import(
+                '../employee-contents/employee-manage/employee-manage.component'
+              ).then((m) => m.EmployeeManageComponent),
             canActivate: [adminAuthGuard],
           },
         ],
       },
       {
         path: 'leaves',
-        component: LeaveMainComponent,
+        loadComponent: () =>
+          import('../leave-contents/leave-main/leave-main.component').then(
+            (m) => m.LeaveMainComponent
+          ),
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
-          { path: 'details', component: LeaveListComponent },
-          { path: 'details/:mode/:id', component: LeaveDetailsComponent },
-          { path: 'new', component: LeaveManageComponent },
-          { path: 'new/:date', component: LeaveManageComponent },
+          {
+            path: 'details',
+            loadComponent: () =>
+              import(
+                '../leave-contents/leave-list/leave-list.component'
+              ).then((m) => m.LeaveListComponent),
+          },
+          {
+            path: 'details/:mode/:id',
+            loadComponent: () =>
+              import(
+                '../leave-contents/leave-details/leave-details.component'
+              ).then((m) => m.LeaveDetailsComponent),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import(
+                '../leave-contents/leave-manage/leave-manage.component'
+              ).then((m) => m.LeaveManageComponent),
+          },
+          {
+            path: 'new/:date',
+            loadComponent: () =>
+              import(
+                '../leave-contents/leave-manage/leave-manage.component'
+              ).then((m) => m.LeaveManageComponent),
+          },
         ],
       },
       {
         path: 'leave-types',
-        component: LeaveTypeMainComponent,
+        loadComponent: () =>
+          import(
+            '../leave-type-contents/leave-type-main/leave-type-main.component'
+          ).then((m) => m.LeaveTypeMainComponent),
         canActivateChild: [adminAuthGuard],
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
-          { path: 'details', component: LeaveTypeListComponent },
-          { path: 'details/:id', component: LeaveTypeDetailsComponent },
+          {
+            path: 'details',
+            loadComponent: () =>
+              import(
+                '../leave-type-contents/leave-type-list/leave-type-list.component'
+              ).then((m) => m.LeaveTypeListComponent),
+          },
+          {
+            path: 'details/:id',
+            loadComponent: () =>
+              import(
+                '../leave-type-contents/leave-type-details/leave-type-details.component'
+              ).then((m) => m.LeaveTypeDetailsComponent),
+          },
           {
             path: 'new',
-            component: LeaveTypeManageComponent,
+            loadComponent: () =>
+              import(
+                '../leave-type-contents/leave-type-manage/leave-type-manage.component'
+              ).then((m) => m.LeaveTypeManageComponent),
           },
         ],
       },
       {
         path: 'events',
-        component: EventMainComponent,
+        loadComponent: () =>
+          import('../event-contents/event-main/event-main.component').then(
+            (m) => m.EventMainComponent
+          ),
         children: [
           { path: '', redirectTo: 'details', pathMatch: 'full' },
-          { path: 'details', component: EventListComponent },
-          { path: 'details/:id', component: EventDetailsComponent },
+          {
+            path: 'details',
+            loadComponent: () =>
+              import(
+                '../event-contents/event-list/event-list.component'
+              ).then((m) => m.EventListComponent),
+          },
+          {
+            path: 'details/:id',
+            loadComponent: () =>
+              import(
+                '../event-contents/event-details/event-details.component'
+              ).then((m) => m.EventDetailsComponent),
+          },
           {
             path: 'new',
-            component: EventManageComponent,
+            loadComponent: () =>
+              import(
+                '../event-contents/event-manage/event-manage.component'
+              ).then((m) => m.EventManageComponent),
           },
           {
             path: 'new/:date',
-            component: EventManageComponent,
+            loadComponent: () =>
+              import(
+                '../event-contents/event-manage/event-manage.component'
+              ).then((m) => m.EventManageComponent),
           },
         ],
       },
       {
         path: 'file-upload',
-        component: FileUploadMainComponent,
+        loadComponent: () =>
+          import(
+            '../file-upload-contents/file-upload-main/file-upload-main.component'
+          ).then((m) => m.FileUploadMainComponent),
         children: [
-          { path: '', component: FileUploadPageComponent },
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                '../file-upload-contents/file-upload-page/file-upload-page.component'
+              ).then((m) => m.FileUploadPageComponent),
+          },
         ],
       },
-      { path: 'profile', component: MyProfileComponent },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import(
+            '../profile-contents/my-profile/my-profile.component'
+          ).then((m) => m.MyProfileComponent),
+      },
     ],
   },
 ];
+

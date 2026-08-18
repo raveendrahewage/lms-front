@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
-import { SignInComponent } from './feature/sign-in/sign-in.component';
 import { authGuard } from './feature/dashboard/auth/auth.guard';
-import { PageNotfoundComponent } from './core/page-notfound/page-notfound.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +10,19 @@ export const routes: Routes = [
       ).then((m) => m.DASHBOARD_ROUTES),
     canActivate: [authGuard],
   },
-  { path: '', component: SignInComponent },
-  { path: '**', component: PageNotfoundComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./feature/sign-in/sign-in.component').then(
+        (m) => m.SignInComponent
+      ),
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./core/page-notfound/page-notfound.component').then(
+        (m) => m.PageNotfoundComponent
+      ),
+  },
 ];
+
